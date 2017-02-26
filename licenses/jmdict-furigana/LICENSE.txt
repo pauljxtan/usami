@@ -1,0 +1,5 @@
+https://github.com/Doublevil/JmdictFurigana
+
+This resource is distributed under the same licence as JMDict (Creative Commons Attribution-ShareAlike Licence).
+
+https://creativecommons.org/licenses/by-sa/3.0/legalcode
