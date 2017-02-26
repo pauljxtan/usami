@@ -1,0 +1,44 @@
+body {
+  background-color: #202020;
+  color: #DFDFDF;
+}
+form {
+  padding: 5px;
+}
+form select {
+  color: #000000;
+}
+form input {
+  width: 120px !important;
+}
+form input[type="submit"] {
+  width: 60px !important;
+}
+#content {
+  width: 1000px;
+}
+#banner {
+  width: 100%;
+}
+.btn-collapse {
+  font-size: 32px;
+}
+.row {
+  padding: 5px;
+}
+.nav-tabs li a {
+  font-size: 24px;
+}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #000000;
+}
+.table-vocab th {
+  font-size: 16px;
+}
+.vocab {
+  font-size: 16px;
+}
+.vocab-vocab {
+  font-size: 32px;
+  padding-top: 20px !important;
+}
