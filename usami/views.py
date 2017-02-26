@@ -16,35 +16,30 @@ def delete_noun(request, noun_id):
     noun = Noun.objects.filter(id=noun_id)
     noun_deleted = noun.first()
     noun.delete()
-
     return _render_home(request, noun_deleted=noun_deleted)
 
 def delete_verb(request, verb_id):
     verb = Verb.objects.filter(id=verb_id)
     verb_deleted = verb.first()
     verb.delete()
-
     return _render_home(request, verb_deleted=verb_deleted)
 
 def delete_adjective(request, adjective_id):
     adjective = Adjective.objects.filter(id=adjective_id)
     adjective_deleted = adjective.first()
     adjective.delete()
-
     return _render_home(request, adjective_deleted=adjective_deleted)
 
 def delete_adverb(request, adverb_id):
     adverb = Adverb.objects.filter(id=adverb_id)
     adverb_deleted = adverb.first()
     adverb.delete()
-
     return _render_home(request, adverb_deleted=adverb_deleted)
 
 def delete_misc(request, misc_id):
     misc = Misc.objects.filter(id=misc_id)
     misc_deleted = misc.first()
     misc.delete()
-
     return _render_home(request, misc_deleted=misc_deleted)
 
 def _render_home(request, noun_added=None, verb_added=None, adjective_added=None,
