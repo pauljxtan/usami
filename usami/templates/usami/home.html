@@ -119,8 +119,14 @@
     </div>
   {% endif %}
 
+  <!-- TODO: Show active button(s) -->
+  <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-fr">Français</button>
   <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
   <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-zh">中文</button>
+
+  <div id="collapse-fr" class="row collapse">
+    <div class="col-md-12"><p class="lead">Coming soon...</p></div>
+  </div>
 
   <div id="collapse-jp" class="row collapse {% if noun_added or verb_added or adjective_added or adverb_added or misc_added or noun_deleted or verb_deleted or adjective_deleted or adverb_deleted or misc_deleted %}in{% endif %}">
     <div class="col-md-12">
@@ -137,7 +143,7 @@
 
         <div id="tab-nouns" class="tab-pane fade {% if not verb_added and not adjective_added and not adverb_added and not misc_added and not verb_deleted and not adjective_deleted and not adverb_deleted and not misc_deleted %}in active{% endif %}">
 
-          <form class="form-inline" action="{% url 'add_noun' %}" method="post">
+          <form class="form-inline" action="{% url 'add_noun_jp' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
               <label for="id_vocab">Vocab:</label>
@@ -189,7 +195,7 @@
 
         <div id="tab-verbs" class="tab-pane fade {% if verb_added or verb_deleted %}in active{% endif %}">
 
-          <form class="form-inline" action="{% url 'add_verb' %}" method="post">
+          <form class="form-inline" action="{% url 'add_verb_jp' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
               <label for="id_vocab">Vocab:</label>
@@ -251,7 +257,7 @@
 
         <div id="tab-adjectives" class="tab-pane fade {% if adjective_added or adjective_deleted %}in active{% endif %}">
 
-          <form class="form-inline" action="{% url 'add_adjective' %}" method="post">
+          <form class="form-inline" action="{% url 'add_adjective_jp' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
               <label for="id_vocab">Vocab:</label>
@@ -312,7 +318,7 @@
 
         <div id="tab-adverbs" class="tab-pane fade {% if adverb_added or adverb_deleted %}in active{% endif %}">
 
-          <form class="form-inline" action="{% url 'add_adverb' %}" method="post">
+          <form class="form-inline" action="{% url 'add_adverb_jp' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
               <label for="id_vocab">Vocab:</label>
@@ -365,7 +371,7 @@
 
         <div id="tab-misc" class="tab-pane fade {% if misc_added or misc_deleted %}in active{% endif %}">
 
-          <form class="form-inline" action="{% url 'add_misc' %}" method="post">
+          <form class="form-inline" action="{% url 'add_misc_jp' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
               <label for="id_vocab">Vocab:</label>

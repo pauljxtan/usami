@@ -6,80 +6,11 @@ from usami.models import Noun, Verb, Adjective, Adverb, Misc
 def home(request):
     return _render_home(request)
 
-def add_noun(request):
-    noun_added = None
-    if request.method == 'POST':
-        form = NounForm(request.POST)
-        if form.is_valid():
-            noun_added = Noun.objects.create(
-                vocab=form.cleaned_data['vocab'],
-                phonetic=form.cleaned_data['phonetic'],
-                english=form.cleaned_data['english'],
-                category=form.cleaned_data['category']
-            )
-        else:
-            # TODO: Display message indicating invalid form
-            pass
-
-    return _render_home(request, noun_added=noun_added)
-
-def add_verb(request):
-    verb_added = None
-    if request.method == 'POST':
-        form = VerbForm(request.POST)
-        if form.is_valid():
-            verb_added = Verb.objects.create(
-                vocab=form.cleaned_data['vocab'],
-                phonetic=form.cleaned_data['phonetic'],
-                english=form.cleaned_data['english'],
-                category=form.cleaned_data['category'],
-                jp_type=form.cleaned_data['jp_type']
-            )
-
-    return _render_home(request, verb_added=verb_added)
-
-def add_adjective(request):
-    adjective_added = None
-    if request.method == 'POST':
-        form = AdjectiveForm(request.POST)
-        if form.is_valid():
-            adjective_added = Adjective.objects.create(
-                vocab=form.cleaned_data['vocab'],
-                phonetic=form.cleaned_data['phonetic'],
-                english=form.cleaned_data['english'],
-                category=form.cleaned_data['category'],
-                jp_type=form.cleaned_data['jp_type']
-            )
-
-    return _render_home(request, adjective_added=adjective_added)
-
-def add_adverb(request):
-    adverb_added = None
-    if request.method == 'POST':
-        form = AdverbForm(request.POST)
-        if form.is_valid():
-            adverb_added = Adverb.objects.create(
-                vocab=form.cleaned_data['vocab'],
-                phonetic=form.cleaned_data['phonetic'],
-                english=form.cleaned_data['english'],
-                category=form.cleaned_data['category']
-            )
-
-    return _render_home(request, adverb_added=adverb_added)
-
-def add_misc(request):
-    misc_added = None
-    if request.method == 'POST':
-        form = MiscForm(request.POST)
-        if form.is_valid():
-            misc_added = Misc.objects.create(
-                vocab=form.cleaned_data['vocab'],
-                phonetic=form.cleaned_data['phonetic'],
-                english=form.cleaned_data['english'],
-                category=form.cleaned_data['category']
-            )
-
-    return _render_home(request, misc_added=misc_added)
+def add_noun_jp(request):      return _add_noun(request, 'jp')
+def add_verb_jp(request):      return _add_verb(request, 'jp')
+def add_adjective_jp(request): return _add_adjective(request, 'jp')
+def add_adverb_jp(request):    return _add_adverb(request, 'jp')
+def add_misc_jp(request):      return _add_misc(request, 'jp')
 
 def delete_noun(request, noun_id):
     noun = Noun.objects.filter(id=noun_id)
@@ -148,6 +79,81 @@ def _render_home(request, noun_added=None, verb_added=None, adjective_added=None
             'misc_deleted': misc_deleted,
         }
     )
+
+def _add_noun(request, lang):
+    noun_added = None
+    if request.method == 'POST':
+        form = NounForm(request.POST)
+        if form.is_valid():
+            noun_added = Noun.objects.create(
+                lang=lang,
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', "")
+            )
+        else:
+            # TODO: Display message indicating invalid form
+            pass
+    return _render_home(request, noun_added=noun_added)
+
+def _add_verb(request, lang):
+    verb_added = None
+    if request.method == 'POST':
+        form = VerbForm(request.POST)
+        if form.is_valid():
+            verb_added = Verb.objects.create(
+                lang=lang,
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', ""),
+                jp_type=form.cleaned_data.get('jp_type', "")
+            )
+    return _render_home(request, verb_added=verb_added)
+
+def _add_adjective(request, lang):
+    adjective_added = None
+    if request.method == 'POST':
+        form = AdjectiveForm(request.POST)
+        if form.is_valid():
+            adjective_added = Adjective.objects.create(
+                lang=lang,
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', ""),
+                jp_type=form.cleaned_data['jp_type']
+            )
+    return _render_home(request, adjective_added=adjective_added)
+
+def _add_adverb(request, lang):
+    adverb_added = None
+    if request.method == 'POST':
+        form = AdverbForm(request.POST)
+        if form.is_valid():
+            adverb_added = Adverb.objects.create(
+                lang=lang,
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', "")
+            )
+    return _render_home(request, adverb_added=adverb_added)
+
+def _add_misc(request, lang):
+    misc_added = None
+    if request.method == 'POST':
+        form = MiscForm(request.POST)
+        if form.is_valid():
+            misc_added = Misc.objects.create(
+                lang=lang,
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', "")
+            )
+    return _render_home(request, misc_added=misc_added)
 
 
 def _get_all_nouns_with_ruby(phonetic_split_str):
