@@ -1,6 +1,6 @@
 # usami
 
-A Django-based vocabulary learning/tracking app for potentially any language (as in "people" language, not programming :) ), especially geared toward logographic scripts
+A Django-based vocabulary learning/tracking app for potentially any language -- as in "people" language, not programming :) -- especially geared toward logographic scripts
 
 Very early days, but current functionality includes
 * Rough framework (models, view functions, etc.) for implementing any language
