@@ -12,6 +12,20 @@ def add_adjective_jp(request): return _add_adjective(request, 'jp')
 def add_adverb_jp(request):    return _add_adverb(request, 'jp')
 def add_misc_jp(request):      return _add_misc(request, 'jp')
 
+def edit_noun(request, noun_id):
+    noun_edited = None
+    if request.method == 'POST':
+        form = NounForm(request.POST)
+        if form.is_valid():
+            Noun.objects.filter(id=noun_id).update(
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', "")
+            )
+            noun_edited = Noun.objects.filter(id=noun_id).first()
+    return _render_home(request, noun_edited=noun_edited)
+
 def delete_noun(request, noun_id):
     noun = Noun.objects.filter(id=noun_id)
     noun_deleted = noun.first()
@@ -42,9 +56,10 @@ def delete_misc(request, misc_id):
     misc.delete()
     return _render_home(request, misc_deleted=misc_deleted)
 
-def _render_home(request, noun_added=None, verb_added=None, adjective_added=None,
-                 adverb_added=None, misc_added=None, noun_deleted=None, verb_deleted=None,
-                 adjective_deleted=None, adverb_deleted=None, misc_deleted=None):
+def _render_home(request,
+                 noun_added=None, verb_added=None, adjective_added=None, adverb_added=None, misc_added=None,
+                 noun_edited=None, verb_edited=None, adjective_edited=None, adverb_edited=None, misc_edited=None,
+                 noun_deleted=None, verb_deleted=None, adjective_deleted=None, adverb_deleted=None, misc_deleted=None):
     return render(
         request,
         'usami/home.html',
@@ -55,17 +70,23 @@ def _render_home(request, noun_added=None, verb_added=None, adjective_added=None
             'adverbs': _get_all_adverbs_with_ruby("・"),
             'miscs': _get_all_miscs_with_ruby("・"),
 
-            'form_noun': NounForm(),
-            'form_verb': VerbForm(),
-            'form_adjective': AdjectiveForm(),
-            'form_adverb': AdverbForm(),
-            'form_misc': MiscForm(),
+            # 'form_noun': NounForm(),
+            # 'form_verb': VerbForm(),
+            # 'form_adjective': AdjectiveForm(),
+            # 'form_adverb': AdverbForm(),
+            # 'form_misc': MiscForm(),
 
             'noun_added': noun_added,
             'verb_added': verb_added,
             'adjective_added': adjective_added,
             'adverb_added': adverb_added,
             'misc_added': misc_added,
+
+            'noun_edited': noun_edited,
+            'verb_edited': verb_edited,
+            'adjective_edited': adjective_edited,
+            'adverb_edited': adverb_edited,
+            'misc_edited': misc_edited,
 
             'noun_deleted': noun_deleted,
             'verb_deleted': verb_deleted,
@@ -149,7 +170,6 @@ def _add_misc(request, lang):
                 category=form.cleaned_data.get('category', "")
             )
     return _render_home(request, misc_added=misc_added)
-
 
 def _get_all_nouns_with_ruby(phonetic_split_str):
     nouns = Noun.objects.all()

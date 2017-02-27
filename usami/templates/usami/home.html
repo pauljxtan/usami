@@ -12,10 +12,10 @@
       <img id="banner" src="{% static 'usami/img/cat_reading.jpg' %}">
     </div>
     <div class="col-md-7">
-      <h1><a href="https://github.com/pauljxtan/usami">GitHub</a></h1>
+      <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
-        <li>Optimize the jmdict-furigana DB</li>
+        <li>Edit</li>
         <li>Toggle phonetic on/off</li>
         <li>Some sort of personal "difficult" score for each</li>
       </ul>
@@ -72,10 +72,60 @@
     </div>
   {% endif %}
 
+  {% if noun_edited %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info">
+          <span class="lead">Edited: {{ noun_edited }}</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if verb_edited %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info">
+          <span class="lead">Edited: {{ verb_edited }}</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if adjective_edited %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info">
+          <span class="lead">Edited: {{ adjective_edited }}</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if adverb_edited %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info">
+          <span class="lead">Edited: {{ adverb_edited }}</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if misc_edited %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info">
+          <span class="lead">Edited: {{ misc_edited }}</span>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   {% if noun_deleted %}
     <div class="row">
       <div class="col-md-12">
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
           <span class="lead">Deleted: {{ noun_deleted }}</span>
         </div>
       </div>
@@ -85,7 +135,7 @@
   {% if verb_deleted %}
     <div class="row">
       <div class="col-md-12">
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
           <span class="lead">Deleted: {{ verb_deleted }}</span>
         </div>
       </div>
@@ -95,7 +145,7 @@
   {% if adjective_deleted %}
     <div class="row">
       <div class="col-md-12">
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
           <span class="lead">Deleted: {{ adjective_deleted }}</span>
         </div>
       </div>
@@ -105,7 +155,7 @@
   {% if adverb_deleted %}
     <div class="row">
       <div class="col-md-12">
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
           <span class="lead">Deleted: {{ adverb_deleted }}</span>
         </div>
       </div>
@@ -115,7 +165,7 @@
   {% if misc_deleted %}
     <div class="row">
       <div class="col-md-12">
-        <div class="alert alert-danger">
+        <div class="alert alert-warning">
           <span class="lead">Deleted: {{ misc_deleted }}</span>
         </div>
       </div>
@@ -123,314 +173,392 @@
   {% endif %}
 
   <!-- TODO: Show active button(s) -->
-  <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-fr">Français</button>
-  <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
-  <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-zh">中文</button>
-
-  <div id="collapse-fr" class="row collapse">
-    <div class="col-md-12"><p class="lead">Coming soon...</p></div>
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-fr">Français</button>
+      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
+      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-zh">中文</button>
+    </div>
   </div>
 
-  <div id="collapse-jp" class="row collapse {% if noun_added or verb_added or adjective_added or adverb_added or misc_added or noun_deleted or verb_deleted or adjective_deleted or adverb_deleted or misc_deleted %}in{% endif %}">
-    <div class="col-md-12">
+  <div id="collapse-fr" class="row collapse">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="lead">Coming soon...</p>
+      </div>
+    </div>
+  </div>
 
-      <ul class="nav nav-tabs">
-        <li {% if not verb_added and not adjective_added and not adverb_added and not misc_added and not verb_deleted and not adjective_deleted and not adverb_deleted and not misc_deleted  %}class="active"{% endif %}><a href="#tab-nouns" data-toggle="tab">Nouns</a></li>
-        <li {% if verb_added or verb_deleted %}class="active"{% endif %}><a href="#tab-verbs" data-toggle="tab">Verbs</a></li>
-        <li {% if adjective_added or adjective_deleted %}class="active"{% endif %}><a href="#tab-adjectives" data-toggle="tab">Adjectives</a></li>
-        <li {% if adverb_added or adverb_deleted %}class="active"{% endif %}><a href="#tab-adverbs" data-toggle="tab">Adverbs</a></li>
-        <li {% if misc_added or misc_deleted %}class="active"{% endif %}><a href="#tab-misc" data-toggle="tab">Misc</a></li>
-      </ul>
+  <div id="collapse-jp" class="collapse {% if noun_added or verb_added or adjective_added or adverb_added or misc_added or noun_deleted or verb_deleted or adjective_deleted or adverb_deleted or misc_deleted %}in{% endif %}">
 
-      <div class="tab-content">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="nav nav-tabs">
+          <li {% if not verb_added and not adjective_added and not adverb_added and not misc_added and not verb_deleted and not adjective_deleted and not adverb_deleted and not misc_deleted  %}class="active"{% endif %}><a href="#tab-nouns" data-toggle="tab">Nouns</a></li>
+          <li {% if verb_added or verb_deleted %}class="active"{% endif %}><a href="#tab-verbs" data-toggle="tab">Verbs</a></li>
+          <li {% if adjective_added or adjective_deleted %}class="active"{% endif %}><a href="#tab-adjectives" data-toggle="tab">Adjectives</a></li>
+          <li {% if adverb_added or adverb_deleted %}class="active"{% endif %}><a href="#tab-adverbs" data-toggle="tab">Adverbs</a></li>
+          <li {% if misc_added or misc_deleted %}class="active"{% endif %}><a href="#tab-misc" data-toggle="tab">Misc</a></li>
+        </ul>
+      </div>
+    </div>
 
-        <div id="tab-nouns" class="tab-pane fade {% if not verb_added and not adjective_added and not adverb_added and not misc_added and not verb_deleted and not adjective_deleted and not adverb_deleted and not misc_deleted %}in active{% endif %}">
+    <div class="tab-content">
 
-          <form class="form-inline" action="{% url 'add_noun_jp' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-              <label for="id_vocab">Vocab:</label>
-              <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_phonetic">Phonetic:</label>
-              <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_english">English:</label>
-              <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_category">Category:</label>
-              <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="submit" value="Add">
-            </div>
-          </form>
+      <div id="tab-nouns" class="tab-pane fade {% if not verb_added and not adjective_added and not adverb_added and not misc_added and not verb_deleted and not adjective_deleted and not adverb_deleted and not misc_deleted %}in active{% endif %}">
 
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-                <thead>
-                <tr>
-                  <th data-field="vocab" data-sortable="true">Vocab</th>
-                  <th data-field="english" data-sortable="true">English</th>
-                  <th data-field="category" data-sortable="true">Category</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for noun in nouns %}
-                  <tr class="vocab-row vocab-row-{{ noun.0.type }}">
-                    <td class="vocab vocab-vocab">{{ noun.1 | safe }}</td>
-                    <td class="vocab vocab-english">{{ noun.0.english }}</td>
-                    <td class="vocab vocab-category">{{ noun.0.category }}</td>
-                    <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_noun' noun.0.id %}">Delete</a></td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-inline" action="{% url 'add_noun_jp' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_vocab">Vocab:</label>
+                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_phonetic">Phonetic:</label>
+                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_english">English:</label>
+                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_category">Category:</label>
+                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="submit" value="Add">
+              </div>
+            </form>
           </div>
-
         </div>
 
-        <div id="tab-verbs" class="tab-pane fade {% if verb_added or verb_deleted %}in active{% endif %}">
-
-          <form class="form-inline" action="{% url 'add_verb_jp' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-              <label for="id_vocab">Vocab:</label>
-              <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_phonetic">Phonetic:</label>
-              <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_english">English:</label>
-              <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_category">Category:</label>
-              <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_jp_type">Jp type:</label>
-              <select id="id_jp_type" name="jp_type" required="">
-                <option value="u">u</option>
-                <option value="r">ru</option>
-                <option value="e">ex</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="submit" value="Add">
-            </div>
-          </form>
-
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-                <thead>
-                <tr>
-                  <th data-field="vocab" data-sortable="true">Vocab</th>
-                  <th data-field="english" data-sortable="true">English</th>
-                  <th data-field="category" data-sortable="true">Category</th>
-                  <th data-field="jp_type" data-sortable="true">Type</th>
-                  <th></th>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+              <thead>
+              <tr>
+                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="english" data-sortable="true">English</th>
+                <th data-field="category" data-sortable="true">Category</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for noun in nouns %}
+                <tr class="vocab-row vocab-row-{{ noun.0.type }}">
+                  <td class="vocab vocab-vocab">{{ noun.1 | safe }}</td>
+                  <td class="vocab vocab-english">{{ noun.0.english }}</td>
+                  <td class="vocab vocab-category">{{ noun.0.category }}</td>
+                  <td class="vocab vocab-buttons">
+                    <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{{ noun.0.id }}">Edit</a>
+                    <a class="btn btn-danger" href="{% url 'delete_noun' noun.0.id %}">Delete</a>
+                  </td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for verb in verbs %}
-                  <tr class="vocab-row vocab-row-{{ verb.0.type }}">
-                    <td class="vocab vocab-vocab">{{ verb.1 | safe }}</td>
-                    <td class="vocab vocab-english">{{ verb.0.english }}</td>
-                    <td class="vocab vocab-category">{{ verb.0.category }}</td>
-                    <td class="vocab vocab-type">{{ verb.0.jp_type }}</td>
-                    <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_verb' verb.0.id %}">Delete</a></td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                <div class="modal fade" id="noun-form-{{ noun.0.id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="noun-form-label-{{ noun.0.id }}">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="noun-form-label-{{ noun.0.id }}">Edit {{ noun.1 | safe }}</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form class="form-inline" action="{% url 'edit_noun' noun.0.id %}" method="post">
+                          {% csrf_token %}
+                          <div class="form-group">
+                            <label for="id_vocab">Vocab:</label>
+                            <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required=""
+                                   value="{{ noun.0.vocab }}">
+                          </div>
+                          <div class="form-group">
+                            <label for="id_phonetic">Phonetic:</label>
+                            <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required=""
+                                   value="{{ noun.0.phonetic }}">
+                          </div>
+                          <div class="form-group">
+                            <label for="id_english">English:</label>
+                            <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required=""
+                                   value="{{ noun.0.english }}">
+                          </div>
+                          <div class="form-group">
+                            <label for="id_category">Category:</label>
+                            <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required=""
+                                   value="{{ noun.0.category }}">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div id="tab-adjectives" class="tab-pane fade {% if adjective_added or adjective_deleted %}in active{% endif %}">
+      </div>
 
-          <form class="form-inline" action="{% url 'add_adjective_jp' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-              <label for="id_vocab">Vocab:</label>
-              <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_phonetic">Phonetic:</label>
-              <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_english">English:</label>
-              <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_category">Category:</label>
-              <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_jp_type">Jp type:</label>
-              <select id="id_jp_type" name="jp_type" required="">
-                <option value="i">i</option>
-                <option value="na">na</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="submit" value="Add">
-            </div>
-          </form>
+      <div id="tab-verbs" class="tab-pane fade {% if verb_added or verb_deleted %}in active{% endif %}">
 
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-                <thead>
-                <tr>
-                  <th data-field="vocab" data-sortable="true">Vocab</th>
-                  <th data-field="english" data-sortable="true">English</th>
-                  <th data-field="category" data-sortable="true">Category</th>
-                  <th data-field="jp_type" data-sortable="true">Type</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for adjective in adjectives %}
-                  <tr class="vocab-row vocab-row-{{ adjective.0.type }}">
-                    <td class="vocab vocab-vocab">{{ adjective.1 | safe }}</td>
-                    <td class="vocab vocab-english">{{ adjective.0.english }}</td>
-                    <td class="vocab vocab-category">{{ adjective.0.category }}</td>
-                    <td class="vocab vocab-type">{{ adjective.0.jp_type }}</td>
-                    <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_adjective' adjective.0.id %}">Delete</a></td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-inline" action="{% url 'add_verb_jp' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_vocab">Vocab:</label>
+                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_phonetic">Phonetic:</label>
+                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_english">English:</label>
+                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_category">Category:</label>
+                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_jp_type">Jp type:</label>
+                <select class="form-control" id="id_jp_type" name="jp_type" required="">
+                  <option value="u">u</option>
+                  <option value="r">ru</option>
+                  <option value="e">ex</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="submit" value="Add">
+              </div>
+            </form>
           </div>
-
         </div>
 
-        <div id="tab-adverbs" class="tab-pane fade {% if adverb_added or adverb_deleted %}in active{% endif %}">
-
-          <form class="form-inline" action="{% url 'add_adverb_jp' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-              <label for="id_vocab">Vocab:</label>
-              <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_phonetic">Phonetic:</label>
-              <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_english">English:</label>
-              <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_category">Category:</label>
-              <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="submit" value="Add">
-            </div>
-          </form>
-
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-                <thead>
-                <tr>
-                  <th data-field="vocab" data-sortable="true">Vocab</th>
-                  <th data-field="english" data-sortable="true">English</th>
-                  <th data-field="category" data-sortable="true">Category</th>
-                  <th></th>
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+              <thead>
+              <tr>
+                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="english" data-sortable="true">English</th>
+                <th data-field="category" data-sortable="true">Category</th>
+                <th data-field="jp_type" data-sortable="true">Type</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for verb in verbs %}
+                <tr class="vocab-row vocab-row-{{ verb.0.type }}">
+                  <td class="vocab vocab-vocab">{{ verb.1 | safe }}</td>
+                  <td class="vocab vocab-english">{{ verb.0.english }}</td>
+                  <td class="vocab vocab-category">{{ verb.0.category }}</td>
+                  <td class="vocab vocab-type">{{ verb.0.jp_type }}</td>
+                  <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_verb' verb.0.id %}">Delete</a></td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for adverb in adverbs %}
-                  <tr class="vocab-row vocab-row-{{ adverb.0.type }}">
-                    <td class="vocab vocab-vocab">{{ adverb.1 | safe }}</td>
-                    <td class="vocab vocab-english">{{ adverb.0.english }}</td>
-                    <td class="vocab vocab-category">{{ adverb.0.category }}</td>
-                    <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_adverb' adverb.0.id %}">Delete</a></td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
+              {% endfor %}
+              </tbody>
+            </table>
           </div>
-
-
         </div>
 
-        <div id="tab-misc" class="tab-pane fade {% if misc_added or misc_deleted %}in active{% endif %}">
+      </div>
 
-          <form class="form-inline" action="{% url 'add_misc_jp' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-              <label for="id_vocab">Vocab:</label>
-              <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_phonetic">Phonetic:</label>
-              <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_english">English:</label>
-              <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-            </div>
-            <div class="form-group">
-              <label for="id_category">Category:</label>
-              <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="submit" value="Add">
-            </div>
-          </form>
+      <div id="tab-adjectives" class="tab-pane fade {% if adjective_added or adjective_deleted %}in active{% endif %}">
 
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-                <thead>
-                <tr>
-                  <th data-field="vocab" data-sortable="true">Vocab</th>
-                  <th data-field="english" data-sortable="true">English</th>
-                  <th data-field="category" data-sortable="true">Category</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for misc in miscs %}
-                  <tr class="vocab-row vocab-row-{{ misc.0.type }}">
-                    <td class="vocab vocab-vocab">{{ misc.1 | safe }}</td>
-                    <td class="vocab vocab-english">{{ misc.0.english }}</td>
-                    <td class="vocab vocab-category">{{ misc.0.category }}</td>
-                    <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_misc' misc.0.id %}">Delete</a></td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-inline" action="{% url 'add_adjective_jp' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_vocab">Vocab:</label>
+                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_phonetic">Phonetic:</label>
+                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_english">English:</label>
+                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_category">Category:</label>
+                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_jp_type">Jp type:</label>
+                <select class="form-control" id="id_jp_type" name="jp_type" required="">
+                  <option value="i">i</option>
+                  <option value="na">na</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="submit" value="Add">
+              </div>
+            </form>
           </div>
+        </div>
 
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+              <thead>
+              <tr>
+                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="english" data-sortable="true">English</th>
+                <th data-field="category" data-sortable="true">Category</th>
+                <th data-field="jp_type" data-sortable="true">Type</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for adjective in adjectives %}
+                <tr class="vocab-row vocab-row-{{ adjective.0.type }}">
+                  <td class="vocab vocab-vocab">{{ adjective.1 | safe }}</td>
+                  <td class="vocab vocab-english">{{ adjective.0.english }}</td>
+                  <td class="vocab vocab-category">{{ adjective.0.category }}</td>
+                  <td class="vocab vocab-type">{{ adjective.0.jp_type }}</td>
+                  <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_adjective' adjective.0.id %}">Delete</a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="tab-adverbs" class="tab-pane fade {% if adverb_added or adverb_deleted %}in active{% endif %}">
+
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-inline" action="{% url 'add_adverb_jp' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_vocab">Vocab:</label>
+                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_phonetic">Phonetic:</label>
+                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_english">English:</label>
+                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_category">Category:</label>
+                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="submit" value="Add">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+              <thead>
+              <tr>
+                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="english" data-sortable="true">English</th>
+                <th data-field="category" data-sortable="true">Category</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for adverb in adverbs %}
+                <tr class="vocab-row vocab-row-{{ adverb.0.type }}">
+                  <td class="vocab vocab-vocab">{{ adverb.1 | safe }}</td>
+                  <td class="vocab vocab-english">{{ adverb.0.english }}</td>
+                  <td class="vocab vocab-category">{{ adverb.0.category }}</td>
+                  <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_adverb' adverb.0.id %}">Delete</a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="tab-misc" class="tab-pane fade {% if misc_added or misc_deleted %}in active{% endif %}">
+
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-inline" action="{% url 'add_misc_jp' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_vocab">Vocab:</label>
+                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_phonetic">Phonetic:</label>
+                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_english">English:</label>
+                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="id_category">Category:</label>
+                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="submit" value="Add">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+              <thead>
+              <tr>
+                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="english" data-sortable="true">English</th>
+                <th data-field="category" data-sortable="true">Category</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for misc in miscs %}
+                <tr class="vocab-row vocab-row-{{ misc.0.type }}">
+                  <td class="vocab vocab-vocab">{{ misc.1 | safe }}</td>
+                  <td class="vocab vocab-english">{{ misc.0.english }}</td>
+                  <td class="vocab vocab-category">{{ misc.0.category }}</td>
+                  <td class="vocab vocab-delete-button"><a class="btn btn-danger" href="{% url 'delete_misc' misc.0.id %}">Delete</a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </div>
 
     </div>
+
   </div>
 
-  <div id="collapse-zh" class="row collapse">
-    <div class="col-md-12"><p class="lead">Coming soon...</p></div>
+  <div id="collapse-zh" class="collapse">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="lead">Coming soon...</p>
+      </div>
+    </div>
   </div>
 {% endblock %}
 
