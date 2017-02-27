@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from usami.forms import NounForm, VerbForm, AdjectiveForm, AdverbForm, MiscForm
 from usami.models import Noun, Verb, Adjective, Adverb, Misc
@@ -25,6 +25,64 @@ def edit_noun(request, noun_id):
             )
             noun_edited = Noun.objects.filter(id=noun_id).first()
     return _render_home(request, noun_edited=noun_edited)
+
+def edit_verb(request, verb_id):
+    verb_edited = None
+    if request.method == 'POST':
+        form = VerbForm(request.POST)
+        if form.is_valid():
+            Verb.objects.filter(id=verb_id).update(
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', ""),
+                type=form.cleaned_data.get('type', "")
+            )
+            verb_edited = Noun.objects.filter(id=verb_id).first()
+    return _render_home(request, verb_edited=verb_edited)
+
+def edit_adjective(request, adjective_id):
+    adjective_edited = None
+    if request.method == 'POST':
+        form = AdjectiveForm(request.POST)
+        if form.is_valid():
+            Adjective.objects.filter(id=adjective_id).update(
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', ""),
+                type=form.cleaned_data.get('type', "")
+            )
+            adjective_edited = Noun.objects.filter(id=adjective_id).first()
+    return _render_home(request, adjective_edited=adjective_edited)
+
+def edit_adverb(request, adverb_id):
+    adverb_edited = None
+    if request.method == 'POST':
+        form = AdverbForm(request.POST)
+        if form.is_valid():
+            Adverb.objects.filter(id=adverb_id).update(
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', "")
+            )
+            adverb_edited = Adverb.objects.filter(id=adverb_id).first()
+    return _render_home(request, adverb_edited=adverb_edited)
+
+def edit_misc(request, misc_id):
+    misc_edited = None
+    if request.method == 'POST':
+        form = MiscForm(request.POST)
+        if form.is_valid():
+            Misc.objects.filter(id=misc_id).update(
+                vocab=form.cleaned_data.get('vocab', ""),
+                phonetic=form.cleaned_data.get('phonetic', ""),
+                english=form.cleaned_data.get('english', ""),
+                category=form.cleaned_data.get('category', "")
+            )
+            misc_edited = Misc.objects.filter(id=misc_id).first()
+    return _render_home(request, misc_edited=misc_edited)
 
 def delete_noun(request, noun_id):
     noun = Noun.objects.filter(id=noun_id)
