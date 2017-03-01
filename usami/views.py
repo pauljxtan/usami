@@ -36,9 +36,9 @@ def edit_verb(request, verb_id):
                 phonetic=form.cleaned_data.get('phonetic', ""),
                 english=form.cleaned_data.get('english', ""),
                 category=form.cleaned_data.get('category', ""),
-                type=form.cleaned_data.get('type', "")
+                jp_type=form.cleaned_data.get('jp_type', "")
             )
-            verb_edited = Noun.objects.filter(id=verb_id).first()
+            verb_edited = Verb.objects.filter(id=verb_id).first()
     return _render_home(request, verb_edited=verb_edited)
 
 def edit_adjective(request, adjective_id):
@@ -51,9 +51,9 @@ def edit_adjective(request, adjective_id):
                 phonetic=form.cleaned_data.get('phonetic', ""),
                 english=form.cleaned_data.get('english', ""),
                 category=form.cleaned_data.get('category', ""),
-                type=form.cleaned_data.get('type', "")
+                jp_type=form.cleaned_data.get('jp_type', "")
             )
-            adjective_edited = Noun.objects.filter(id=adjective_id).first()
+            adjective_edited = Adjective.objects.filter(id=adjective_id).first()
     return _render_home(request, adjective_edited=adjective_edited)
 
 def edit_adverb(request, adverb_id):
