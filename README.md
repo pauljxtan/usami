@@ -18,6 +18,9 @@ The idea is to introduce loads more useful features that would make it more than
 
 ##### My thoughts/ramblings, feel free to stop reading here
 
+##### 2017-03-06
+* The "category" column should be the one to pivot on - to divide huge masses of vocab into bite-sized chunks...
+
 ###### 2017-02-26
 * Experimenting with using [this resource](https://github.com/Doublevil/JmdictFurigana) to derive furigana from a local database - the general idea seems to work, but it doesn't seem to be entirely comprehensive... might be best after all to just supply the furigana manually. That way also eliminates ambiguity with multiple readings (of course we can't determine it a priori and without context). It's still a really cool resource though and it'd be nice to still make use of it in some way...
 
