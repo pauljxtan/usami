@@ -9,15 +9,17 @@
   <div class="row">
     <div class="col-md-5">
       <a href="{% url 'home' %}"><img id="banner" src="{% static 'usami/img/59452194_p0.png' %}"></a>
-{#      <a href="{% url 'home' %}"><img id="banner" src="{% static 'usami/img/cat_reading.png' %}"></a>#}
+      {#      <a href="{% url 'home' %}"><img id="banner" src="{% static 'usami/img/cat_reading.png' %}"></a>#}
     </div>
     <div class="col-md-7">
       <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
         <li>Keep tab open after edit</li>
+        <li>Filter on category (etc.)</li>
+        <li>Stats (#/category, etc.)</li>
         <li>Toggle phonetic on/off</li>
-        <li>Some sort of personal "difficult" score for each</li>
+        <li>Some sort of personal "difficulty" score for each</li>
       </ul>
     </div>
   </div>
@@ -190,6 +192,12 @@
   </div>
 
   <div id="collapse-jp" class="collapse {% if noun_added or verb_added or adjective_added or adverb_added or misc_added or noun_deleted or verb_deleted or adjective_deleted or adverb_deleted or misc_deleted %}in{% endif %}">
+
+    <div class="row">
+      <div class="col-md-12">
+        <p class="lead">{{ total_nouns }} nouns ・ {{ total_verbs }} verbs ・ {{ total_adjectives }} adjectives ・ {{ total_adverbs }} adverbs ・ {{ total_miscs }} misc</p>
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-md-12">

@@ -151,6 +151,12 @@ def _render_home(request,
             'adjective_deleted': adjective_deleted,
             'adverb_deleted': adverb_deleted,
             'misc_deleted': misc_deleted,
+
+            'total_nouns': len(_get_all_nouns()),
+            'total_verbs': len(_get_all_verbs()),
+            'total_adjectives': len(_get_all_adjectives()),
+            'total_adverbs': len(_get_all_adverbs()),
+            'total_miscs': len(_get_all_miscs()),
         }
     )
 
@@ -229,24 +235,30 @@ def _add_misc(request, lang):
             )
     return _render_home(request, misc_added=misc_added)
 
+def _get_all_nouns(): return Noun.objects.all()
+def _get_all_verbs(): return Verb.objects.all()
+def _get_all_adjectives(): return Adjective.objects.all()
+def _get_all_adverbs(): return Adverb.objects.all()
+def _get_all_miscs(): return Misc.objects.all()
+
 def _get_all_nouns_with_ruby(phonetic_split_str):
-    nouns = Noun.objects.all()
+    nouns = _get_all_nouns()
     return _get_vocabs_with_ruby(nouns, phonetic_split_str)
 
 def _get_all_verbs_with_ruby(phonetic_split_str):
-    verbs = Verb.objects.all()
+    verbs = _get_all_verbs()
     return _get_vocabs_with_ruby(verbs, phonetic_split_str)
 
 def _get_all_adjectives_with_ruby(phonetic_split_str):
-    adjectives = Adjective.objects.all()
+    adjectives = _get_all_adjectives()
     return _get_vocabs_with_ruby(adjectives, phonetic_split_str)
 
 def _get_all_adverbs_with_ruby(phonetic_split_str):
-    adverbs = Adverb.objects.all()
+    adverbs = _get_all_adverbs()
     return _get_vocabs_with_ruby(adverbs, phonetic_split_str)
 
 def _get_all_miscs_with_ruby(phonetic_split_str):
-    miscs = Misc.objects.all()
+    miscs = _get_all_miscs()
     return _get_vocabs_with_ruby(miscs, phonetic_split_str)
 
 def _get_vocabs_with_ruby(vocabs, phonetic_split_str):
