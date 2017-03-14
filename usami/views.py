@@ -36,6 +36,7 @@ def edit_verb(request, verb_id):
                 phonetic=form.cleaned_data.get('phonetic', ""),
                 english=form.cleaned_data.get('english', ""),
                 category=form.cleaned_data.get('category', ""),
+                transitivity=form.cleaned_data.get('transitivity', ""),
                 jp_type=form.cleaned_data.get('jp_type', "")
             )
             verb_edited = Verb.objects.filter(id=verb_id).first()
@@ -188,6 +189,7 @@ def _add_verb(request, lang):
                 phonetic=form.cleaned_data.get('phonetic', ""),
                 english=form.cleaned_data.get('english', ""),
                 category=form.cleaned_data.get('category', ""),
+                transitivity=form.cleaned_data.get('transitivity', ""),
                 jp_type=form.cleaned_data.get('jp_type', "")
             )
     return _render_home(request, verb_added=verb_added)

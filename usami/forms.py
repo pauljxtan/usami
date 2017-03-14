@@ -12,7 +12,7 @@ class NounForm(forms.ModelForm):
 class VerbForm(forms.ModelForm):
     class Meta:
         model = Verb
-        fields = POS_FIELDS + ('jp_type', )
+        fields = POS_FIELDS + ('transitivity', 'jp_type', )
 
 class AdjectiveForm(forms.ModelForm):
     class Meta:

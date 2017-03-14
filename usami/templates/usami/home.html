@@ -15,6 +15,7 @@
       <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
+        <li>Use Django messages framework</li>
         <li>Keep tab open after edit</li>
         <li>Filter on category (etc.)</li>
         <li>Stats (#/category, etc.)</li>
@@ -336,6 +337,13 @@
                 <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
               </div>
               <div class="form-group">
+                <label for="id_transitivity">Transitivity:</label>
+                <select class="form-control" id="id_transitivity" name="transitivity" required="">
+                  <option value="t">t</option>
+                  <option value="i">i</option>
+                </select>
+              </div>
+              <div class="form-group">
                 <label for="id_jp_type">Jp type:</label>
                 <select class="form-control" id="id_jp_type" name="jp_type" required="">
                   <option value="u">u</option>
@@ -358,6 +366,7 @@
                 <th data-field="vocab" data-sortable="true">Vocab</th>
                 <th data-field="english" data-sortable="true">English</th>
                 <th data-field="category" data-sortable="true">Category</th>
+                <th data-field="transitivity" data-sortable="true">Transitivity</th>
                 <th data-field="jp_type" data-sortable="true">Type</th>
                 <th></th>
               </tr>
@@ -368,6 +377,7 @@
                   <td class="vocab vocab-vocab">{{ verb.1 | safe }}</td>
                   <td class="vocab vocab-english">{{ verb.0.english }}</td>
                   <td class="vocab vocab-category">{{ verb.0.category }}</td>
+                  <td class="vocab vocab-transitivity">{{ verb.0.transitivity }}</td>
                   <td class="vocab vocab-type">{{ verb.0.jp_type }}</td>
                   <td class="vocab vocab-buttons">
                     <a class="btn btn-primary" data-toggle="modal" data-target="#verb-form-{{ verb.0.id }}">Edit</a>
@@ -404,6 +414,13 @@
                             <label for="id_category">Category:</label>
                             <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required=""
                                    value="{{ verb.0.category }}">
+                          </div>
+                          <div class="form-group">
+                            <label for="id_transitivity">Transitivity:</label>
+                            <select class="form-control" id="id_transitivity" name="transitivity" required="">
+                              <option value="t">t</option>
+                              <option value="i">i</option>
+                            </select>
                           </div>
                           <div class="form-group">
                             <label for="id_jp_type">Jp type:</label>
