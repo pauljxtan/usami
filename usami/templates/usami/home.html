@@ -39,21 +39,21 @@
   <!-- TODO: Show active button(s) -->
   <div class="row">
     <div class="col-md-12">
-      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-fr">Français</button>
+{#      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-fr">Français</button>#}
       <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
       <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-zh">中文</button>
     </div>
   </div>
 
-  <div id="collapse-fr" class="row collapse">
-    <div class="row">
-      <div class="col-md-12">
-        <p class="lead">Coming soon...</p>
-      </div>
-    </div>
-  </div>
+{#  <div id="collapse-fr" class="row collapse">#}
+{#    <div class="row">#}
+{#      <div class="col-md-12">#}
+{#        <p class="lead">Coming soon...</p>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
 
-  <div id="collapse-jp" class="collapse {% if noun_added or verb_added or adjective_added or adverb_added or misc_added or noun_deleted or verb_deleted or adjective_deleted or adverb_deleted or misc_deleted %}in{% endif %}">
+  <div id="collapse-jp" class="collapse {% if active_lang == 'jp' %}in{% endif %}">
 
     <div class="row">
       <div class="col-md-12">
@@ -64,18 +64,18 @@
     <div class="row">
       <div class="col-md-12">
         <ul class="nav nav-tabs">
-          <li {% if not verb_added and not adjective_added and not adverb_added and not misc_added and not verb_deleted and not adjective_deleted and not adverb_deleted and not misc_deleted  %}class="active"{% endif %}><a href="#tab-nouns" data-toggle="tab">Nouns</a></li>
-          <li {% if verb_added or verb_deleted %}class="active"{% endif %}><a href="#tab-verbs" data-toggle="tab">Verbs</a></li>
-          <li {% if adjective_added or adjective_deleted %}class="active"{% endif %}><a href="#tab-adjectives" data-toggle="tab">Adjectives</a></li>
-          <li {% if adverb_added or adverb_deleted %}class="active"{% endif %}><a href="#tab-adverbs" data-toggle="tab">Adverbs</a></li>
-          <li {% if misc_added or misc_deleted %}class="active"{% endif %}><a href="#tab-misc" data-toggle="tab">Misc</a></li>
+          <li {% if active_pos == 'nouns' %}class="active"{% endif %}><a href="#tab-nouns" data-toggle="tab">Nouns</a></li>
+          <li {% if active_pos == 'verbs' %}class="active"{% endif %}><a href="#tab-verbs" data-toggle="tab">Verbs</a></li>
+          <li {% if active_pos == 'adjectives' %}class="active"{% endif %}><a href="#tab-adjectives" data-toggle="tab">Adjectives</a></li>
+          <li {% if active_pos == 'adverbs' %}class="active"{% endif %}><a href="#tab-adverbs" data-toggle="tab">Adverbs</a></li>
+          <li {% if active_pos == 'miscs' %}class="active"{% endif %}><a href="#tab-misc" data-toggle="tab">Misc</a></li>
         </ul>
       </div>
     </div>
 
     <div class="tab-content">
 
-      <div id="tab-nouns" class="tab-pane fade {% if not verb_added and not adjective_added and not adverb_added and not misc_added and not verb_deleted and not adjective_deleted and not adverb_deleted and not misc_deleted %}in active{% endif %}">
+      <div id="tab-nouns" class="tab-pane fade {% if active_pos == 'nouns' %}in active{% endif %}">
 
         <div class="row">
           <div class="col-md-12">
@@ -175,7 +175,7 @@
 
       </div>
 
-      <div id="tab-verbs" class="tab-pane fade {% if verb_added or verb_deleted %}in active{% endif %}">
+      <div id="tab-verbs" class="tab-pane fade {% if active_pos == 'verbs' %}in active{% endif %}">
 
         <div class="row">
           <div class="col-md-12">
@@ -308,7 +308,7 @@
 
       </div>
 
-      <div id="tab-adjectives" class="tab-pane fade {% if adjective_added or adjective_deleted %}in active{% endif %}">
+      <div id="tab-adjectives" class="tab-pane fade {% if active_pos == 'adjectives' %}in active{% endif %}">
 
         <div class="row">
           <div class="col-md-12">
@@ -423,7 +423,7 @@
 
       </div>
 
-      <div id="tab-adverbs" class="tab-pane fade {% if adverb_added or adverb_deleted %}in active{% endif %}">
+      <div id="tab-adverbs" class="tab-pane fade {% if active_pos == 'adverbs' %}in active{% endif %}">
 
         <div class="row">
           <div class="col-md-12">
@@ -520,10 +520,9 @@
           </div>
         </div>
 
-
       </div>
 
-      <div id="tab-misc" class="tab-pane fade {% if misc_added or misc_deleted %}in active{% endif %}">
+      <div id="tab-misc" class="tab-pane fade {% if active_pos == 'miscs' %}in active{% endif %}">
 
         <div class="row">
           <div class="col-md-12">

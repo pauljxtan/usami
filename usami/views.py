@@ -26,7 +26,8 @@ def edit_noun(request, noun_id):
             )
             noun_edited = Noun.objects.filter(id=noun_id).first()
             messages.add_message(request, messages.INFO, "Edited: {}".format(noun_edited))
-    return _render_home(request)
+    # TODO: need to figure out the active language here somehow (get from object?)
+    return _render_home(request, active_pos='nouns')
 
 def edit_verb(request, verb_id):
     verb_edited = None
@@ -43,7 +44,7 @@ def edit_verb(request, verb_id):
             )
             verb_edited = Verb.objects.filter(id=verb_id).first()
             messages.add_message(request, messages.INFO, "Edited: {}".format(verb_edited))
-    return _render_home(request)
+    return _render_home(request, active_pos='verbs')
 
 def edit_adjective(request, adjective_id):
     adjective_edited = None
@@ -59,7 +60,7 @@ def edit_adjective(request, adjective_id):
             )
             adjective_edited = Adjective.objects.filter(id=adjective_id).first()
             messages.add_message(request, messages.INFO, "Edited: {}".format(adjective_edited))
-    return _render_home(request)
+    return _render_home(request, active_pos='adjectives')
 
 def edit_adverb(request, adverb_id):
     adverb_edited = None
@@ -74,7 +75,7 @@ def edit_adverb(request, adverb_id):
             )
             adverb_edited = Adverb.objects.filter(id=adverb_id).first()
             messages.add_message(request, messages.INFO, "Edited: {}".format(adverb_edited))
-    return _render_home(request)
+    return _render_home(request, active_pos='adverbs')
 
 def edit_misc(request, misc_id):
     misc_edited = None
@@ -89,47 +90,44 @@ def edit_misc(request, misc_id):
             )
             misc_edited = Misc.objects.filter(id=misc_id).first()
             messages.add_message(request, messages.INFO, "Edited: {}".format(misc_edited))
-    return _render_home(request)
+    return _render_home(request, active_pos='miscs')
 
 def delete_noun(request, noun_id):
     noun = Noun.objects.filter(id=noun_id)
     noun_deleted = noun.first()
     noun.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(noun_deleted))
-    return _render_home(request)
+    return _render_home(request, active_pos='nouns')
 
 def delete_verb(request, verb_id):
     verb = Verb.objects.filter(id=verb_id)
     verb_deleted = verb.first()
     verb.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(verb_deleted))
-    return _render_home(request)
+    return _render_home(request, active_pos='verbs')
 
 def delete_adjective(request, adjective_id):
     adjective = Adjective.objects.filter(id=adjective_id)
     adjective_deleted = adjective.first()
     adjective.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(adjective_deleted))
-    return _render_home(request)
+    return _render_home(request, active_pos='adjectives')
 
 def delete_adverb(request, adverb_id):
     adverb = Adverb.objects.filter(id=adverb_id)
     adverb_deleted = adverb.first()
     adverb.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(adverb_deleted))
-    return _render_home(request)
+    return _render_home(request, active_pos='adverbs')
 
 def delete_misc(request, misc_id):
     misc = Misc.objects.filter(id=misc_id)
     misc_deleted = misc.first()
     misc.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(misc_deleted))
-    return _render_home(request)
+    return _render_home(request, active_pos='miscs')
 
-def _render_home(request,
-                 noun_added=None, verb_added=None, adjective_added=None, adverb_added=None, misc_added=None,
-                 noun_edited=None, verb_edited=None, adjective_edited=None, adverb_edited=None, misc_edited=None,
-                 noun_deleted=None, verb_deleted=None, adjective_deleted=None, adverb_deleted=None, misc_deleted=None):
+def _render_home(request, active_lang='jp', active_pos=None):
     return render(
         request,
         'usami/home.html',
@@ -139,6 +137,9 @@ def _render_home(request,
             'adjectives': _get_all_adjectives_with_ruby("・"),
             'adverbs': _get_all_adverbs_with_ruby("・"),
             'miscs': _get_all_miscs_with_ruby("・"),
+
+            'active_lang': active_lang,
+            'active_pos': active_pos,
 
             'total_nouns': len(_get_all_nouns()),
             'total_verbs': len(_get_all_verbs()),
@@ -164,7 +165,7 @@ def _add_noun(request, lang):
         else:
             # TODO: Display message indicating invalid form
             pass
-    return _render_home(request)
+    return _render_home(request, lang, 'nouns')
 
 def _add_verb(request, lang):
     verb_added = None
@@ -181,7 +182,7 @@ def _add_verb(request, lang):
                 jp_type=form.cleaned_data.get('jp_type', "")
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(verb_added))
-    return _render_home(request)
+    return _render_home(request, lang, 'verbs')
 
 def _add_adjective(request, lang):
     adjective_added = None
@@ -197,7 +198,7 @@ def _add_adjective(request, lang):
                 jp_type=form.cleaned_data['jp_type']
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(adjective_added))
-    return _render_home(request)
+    return _render_home(request, lang, 'adjectives')
 
 def _add_adverb(request, lang):
     adverb_added = None
@@ -212,7 +213,7 @@ def _add_adverb(request, lang):
                 category=form.cleaned_data.get('category', "")
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(adverb_added))
-    return _render_home(request)
+    return _render_home(request, lang, 'adverbs')
 
 def _add_misc(request, lang):
     misc_added = None
@@ -227,7 +228,7 @@ def _add_misc(request, lang):
                 category=form.cleaned_data.get('category', "")
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(misc_added))
-    return _render_home(request)
+    return _render_home(request, lang, 'miscs')
 
 def _get_all_nouns(): return Noun.objects.all()
 def _get_all_verbs(): return Verb.objects.all()
