@@ -1,4 +1,5 @@
 import os
+from django.contrib import messages
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -82,3 +83,11 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+MESSAGE_TAGS = {
+    messages.constants.DEBUG: 'debug',
+    messages.constants.INFO: 'info',
+    messages.constants.SUCCESS: 'success',
+    messages.constants.WARNING: 'warning',
+    messages.constants.ERROR: 'danger',
+}

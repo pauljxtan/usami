@@ -15,7 +15,6 @@
       <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
-        <li>Use Django messages framework</li>
         <li>Keep tab open after edit</li>
         <li>Filter on category (etc.)</li>
         <li>Stats (#/category, etc.)</li>
@@ -25,154 +24,16 @@
     </div>
   </div>
 
-  {% if noun_added %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-success">
-          <span class="lead">Added: {{ noun_added }}</span>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-{{ message.tags }}">
+            <span class="lead">{{ message }}</span>
+          </div>
         </div>
       </div>
-    </div>
-  {% endif %}
-
-  {% if verb_added %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-success">
-          <span class="lead">Added: {{ verb_added }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if adjective_added %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-success">
-          <span class="lead">Added: {{ adjective_added }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if adverb_added %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-success">
-          <span class="lead">Added: {{ adverb_added }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if misc_added %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-success">
-          <span class="lead">Added: {{ misc_added }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if noun_edited %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-info">
-          <span class="lead">Edited: {{ noun_edited }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if verb_edited %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-info">
-          <span class="lead">Edited: {{ verb_edited }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if adjective_edited %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-info">
-          <span class="lead">Edited: {{ adjective_edited }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if adverb_edited %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-info">
-          <span class="lead">Edited: {{ adverb_edited }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if misc_edited %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-info">
-          <span class="lead">Edited: {{ misc_edited }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if noun_deleted %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-warning">
-          <span class="lead">Deleted: {{ noun_deleted }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if verb_deleted %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-warning">
-          <span class="lead">Deleted: {{ verb_deleted }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if adjective_deleted %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-warning">
-          <span class="lead">Deleted: {{ adjective_deleted }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if adverb_deleted %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-warning">
-          <span class="lead">Deleted: {{ adverb_deleted }}</span>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if misc_deleted %}
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-warning">
-          <span class="lead">Deleted: {{ misc_deleted }}</span>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   {% endif %}
 
   <!-- TODO: Show active button(s) -->
