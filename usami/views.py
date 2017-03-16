@@ -142,11 +142,11 @@ def delete_misc(request, misc_id):
     return _render_home(request, 'miscs')
 
 def _render_home(request, active_pos=None, active_lang='jp'):
-    noun_stats = _get_noun_stats()
-    verb_stats = _get_verb_stats()
-    adjective_stats = _get_adjective_stats()
-    adverb_stats = _get_adverb_stats()
-    misc_stats = _get_misc_stats()
+    #noun_stats = _get_noun_stats()
+    #verb_stats = _get_verb_stats()
+    #adjective_stats = _get_adjective_stats()
+    #adverb_stats = _get_adverb_stats()
+    #misc_stats = _get_misc_stats()
     return render(
         request,
         'usami/home.html',

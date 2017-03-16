@@ -228,7 +228,7 @@
                   <td class="vocab vocab-vocab">{{ verb.1 | safe }}</td>
                   <td class="vocab vocab-english">{{ verb.0.english }}</td>
                   <td class="vocab vocab-category">{{ verb.0.category }}</td>
-                  <td class="vocab vocab-transitivity">{{ verb.0.transitivity }}</td>
+                  <td class="vocab vocab-transitivity">{{ verb.0.get_transitivity_display }}</td>
                   <td class="vocab vocab-type">{{ verb.0.jp_type }}</td>
                   <td class="vocab vocab-buttons">
                     <a class="btn btn-primary" data-toggle="modal" data-target="#verb-form-{{ verb.0.id }}">Edit</a>
