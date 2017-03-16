@@ -14,7 +14,7 @@ def add_adverb_jp(request):    return _add_adverb(request, 'jp')
 def add_misc_jp(request):      return _add_misc(request, 'jp')
 
 def edit_noun(request, noun_id):
-    noun_edited = None
+    active_lang = None
     if request.method == 'POST':
         form = NounForm(request.POST)
         if form.is_valid():
@@ -25,12 +25,15 @@ def edit_noun(request, noun_id):
                 category=form.cleaned_data.get('category', "")
             )
             noun_edited = Noun.objects.filter(id=noun_id).first()
+            active_lang = noun_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(noun_edited))
-    # TODO: need to figure out the active language here somehow (get from object?)
-    return _render_home(request, active_pos='nouns')
+    if active_lang:
+        return _render_home(request, 'nouns', active_lang)
+    return _render_home(request, 'nouns')
+
 
 def edit_verb(request, verb_id):
-    verb_edited = None
+    active_lang = None
     if request.method == 'POST':
         form = VerbForm(request.POST)
         if form.is_valid():
@@ -43,11 +46,14 @@ def edit_verb(request, verb_id):
                 jp_type=form.cleaned_data.get('jp_type', "")
             )
             verb_edited = Verb.objects.filter(id=verb_id).first()
+            active_lang = verb_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(verb_edited))
-    return _render_home(request, active_pos='verbs')
+    if active_lang:
+        return _render_home(request, 'verbs', active_lang)
+    return _render_home(request, 'verbs')
 
 def edit_adjective(request, adjective_id):
-    adjective_edited = None
+    active_lang = None
     if request.method == 'POST':
         form = AdjectiveForm(request.POST)
         if form.is_valid():
@@ -59,11 +65,14 @@ def edit_adjective(request, adjective_id):
                 jp_type=form.cleaned_data.get('jp_type', "")
             )
             adjective_edited = Adjective.objects.filter(id=adjective_id).first()
+            active_lang = adjective_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(adjective_edited))
-    return _render_home(request, active_pos='adjectives')
+    if active_lang:
+        return _render_home(request, 'adjectives', active_lang)
+    return _render_home(request, 'adjectives')
 
 def edit_adverb(request, adverb_id):
-    adverb_edited = None
+    active_lang = None
     if request.method == 'POST':
         form = AdverbForm(request.POST)
         if form.is_valid():
@@ -74,11 +83,14 @@ def edit_adverb(request, adverb_id):
                 category=form.cleaned_data.get('category', "")
             )
             adverb_edited = Adverb.objects.filter(id=adverb_id).first()
+            active_lang = adverb_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(adverb_edited))
-    return _render_home(request, active_pos='adverbs')
+    if active_lang:
+        return _render_home(request, 'adverbs', active_lang)
+    return _render_home(request, 'adverbs')
 
 def edit_misc(request, misc_id):
-    misc_edited = None
+    active_lang = None
     if request.method == 'POST':
         form = MiscForm(request.POST)
         if form.is_valid():
@@ -89,45 +101,48 @@ def edit_misc(request, misc_id):
                 category=form.cleaned_data.get('category', "")
             )
             misc_edited = Misc.objects.filter(id=misc_id).first()
+            active_lang = misc_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(misc_edited))
-    return _render_home(request, active_pos='miscs')
+    if active_lang:
+        return _render_home(request, 'miscs', active_lang)
+    return _render_home(request, 'miscs')
 
 def delete_noun(request, noun_id):
     noun = Noun.objects.filter(id=noun_id)
     noun_deleted = noun.first()
     noun.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(noun_deleted))
-    return _render_home(request, active_pos='nouns')
+    return _render_home(request, 'nouns')
 
 def delete_verb(request, verb_id):
     verb = Verb.objects.filter(id=verb_id)
     verb_deleted = verb.first()
     verb.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(verb_deleted))
-    return _render_home(request, active_pos='verbs')
+    return _render_home(request, 'verbs')
 
 def delete_adjective(request, adjective_id):
     adjective = Adjective.objects.filter(id=adjective_id)
     adjective_deleted = adjective.first()
     adjective.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(adjective_deleted))
-    return _render_home(request, active_pos='adjectives')
+    return _render_home(request, 'adjectives')
 
 def delete_adverb(request, adverb_id):
     adverb = Adverb.objects.filter(id=adverb_id)
     adverb_deleted = adverb.first()
     adverb.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(adverb_deleted))
-    return _render_home(request, active_pos='adverbs')
+    return _render_home(request, 'adverbs')
 
 def delete_misc(request, misc_id):
     misc = Misc.objects.filter(id=misc_id)
     misc_deleted = misc.first()
     misc.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(misc_deleted))
-    return _render_home(request, active_pos='miscs')
+    return _render_home(request, 'miscs')
 
-def _render_home(request, active_lang='jp', active_pos=None):
+def _render_home(request, active_pos=None, active_lang='jp'):
     return render(
         request,
         'usami/home.html',
@@ -138,8 +153,8 @@ def _render_home(request, active_lang='jp', active_pos=None):
             'adverbs': _get_all_adverbs_with_ruby("・"),
             'miscs': _get_all_miscs_with_ruby("・"),
 
-            'active_lang': active_lang,
             'active_pos': active_pos,
+            'active_lang': active_lang,
 
             'total_nouns': len(_get_all_nouns()),
             'total_verbs': len(_get_all_verbs()),
@@ -165,7 +180,7 @@ def _add_noun(request, lang):
         else:
             # TODO: Display message indicating invalid form
             pass
-    return _render_home(request, lang, 'nouns')
+    return _render_home(request, 'nouns', lang)
 
 def _add_verb(request, lang):
     verb_added = None
@@ -182,7 +197,7 @@ def _add_verb(request, lang):
                 jp_type=form.cleaned_data.get('jp_type', "")
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(verb_added))
-    return _render_home(request, lang, 'verbs')
+    return _render_home(request, 'verbs', lang)
 
 def _add_adjective(request, lang):
     adjective_added = None
@@ -198,7 +213,7 @@ def _add_adjective(request, lang):
                 jp_type=form.cleaned_data['jp_type']
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(adjective_added))
-    return _render_home(request, lang, 'adjectives')
+    return _render_home(request, 'adjectives', lang)
 
 def _add_adverb(request, lang):
     adverb_added = None
@@ -213,7 +228,7 @@ def _add_adverb(request, lang):
                 category=form.cleaned_data.get('category', "")
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(adverb_added))
-    return _render_home(request, lang, 'adverbs')
+    return _render_home(request, 'adverbs', lang)
 
 def _add_misc(request, lang):
     misc_added = None
@@ -228,7 +243,7 @@ def _add_misc(request, lang):
                 category=form.cleaned_data.get('category', "")
             )
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(misc_added))
-    return _render_home(request, lang, 'miscs')
+    return _render_home(request, 'miscs', lang)
 
 def _get_all_nouns(): return Noun.objects.all()
 def _get_all_verbs(): return Verb.objects.all()

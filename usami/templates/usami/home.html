@@ -15,7 +15,6 @@
       <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
-        <li>Keep tab open after edit</li>
         <li>Filter on category (etc.)</li>
         <li>Stats (#/category, etc.)</li>
         <li>Toggle phonetic on/off</li>
@@ -39,19 +38,10 @@
   <!-- TODO: Show active button(s) -->
   <div class="row">
     <div class="col-md-12">
-{#      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-fr">Français</button>#}
       <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
       <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-zh">中文</button>
     </div>
   </div>
-
-{#  <div id="collapse-fr" class="row collapse">#}
-{#    <div class="row">#}
-{#      <div class="col-md-12">#}
-{#        <p class="lead">Coming soon...</p>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
 
   <div id="collapse-jp" class="collapse {% if active_lang == 'jp' %}in{% endif %}">
 
