@@ -31,7 +31,6 @@ def edit_noun(request, noun_id):
         return _render_home(request, 'nouns', active_lang)
     return _render_home(request, 'nouns')
 
-
 def edit_verb(request, verb_id):
     active_lang = None
     if request.method == 'POST':
@@ -143,6 +142,11 @@ def delete_misc(request, misc_id):
     return _render_home(request, 'miscs')
 
 def _render_home(request, active_pos=None, active_lang='jp'):
+    noun_stats = _get_noun_stats()
+    verb_stats = _get_verb_stats()
+    adjective_stats = _get_adjective_stats()
+    adverb_stats = _get_adverb_stats()
+    misc_stats = _get_misc_stats()
     return render(
         request,
         'usami/home.html',
@@ -281,3 +285,37 @@ def _get_vocabs_with_ruby(vocabs, phonetic_split_str):
                 vocab_ruby += "<ruby>{}<rp>(</rp><rt>{}</rt><rp>)</rp></ruby>".format(v, phonetic_split [i])
         vocabs_with_ruby.append((vocab, vocab_ruby))
     return vocabs_with_ruby
+
+def _get_noun_stats():
+    nouns = _get_all_nouns()
+    return _get_vocab_stats(nouns)
+
+def _get_verb_stats():
+    verbs = _get_all_verbs()
+    return _get_vocab_stats(verbs)
+
+def _get_adjective_stats():
+    adjectives = _get_all_adjectives()
+    return _get_vocab_stats(adjectives)
+
+def _get_adverb_stats():
+    adverbs = _get_all_adverbs()
+    return _get_vocab_stats(adverbs)
+
+def _get_misc_stats():
+    miscs = _get_all_miscs()
+    return _get_vocab_stats(miscs)
+
+def _get_vocab_stats(vocabs):
+    stats = {}
+    stats['category_counts'] = _get_category_counts(vocabs)
+    print(stats['category_counts'])
+    return stats
+
+def _get_category_counts(vocabs):
+    categories_all = [vocab.category for vocab in vocabs]
+    categories_unique = sorted(set(categories_all))
+    category_counts = []
+    for category in categories_unique:
+        category_counts.append((category, categories_all.count(category)))
+    return category_counts
