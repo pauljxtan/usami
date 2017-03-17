@@ -96,6 +96,30 @@
 
         <div class="row">
           <div class="col-md-12">
+            <button class="btn btn-default" data-toggle="collapse" data-target="#stats-noun">Show stats</button>
+            <div id="stats-noun" class="collapse">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category_and_count in noun_stats.category_counts %}
+                  <tr>
+                    <td>{{ category_and_count.0 }}</td>
+                    <td>{{ category_and_count.1 }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
             <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
               <thead>
               <tr>
@@ -206,6 +230,30 @@
                 <input class="form-control" type="submit" value="Add">
               </div>
             </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-default" data-toggle="collapse" data-target="#stats-verb">Show stats</button>
+            <div id="stats-verb" class="collapse">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category_and_count in verb_stats.category_counts %}
+                  <tr>
+                    <td>{{ category_and_count.0 }}</td>
+                    <td>{{ category_and_count.1 }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -336,6 +384,30 @@
 
         <div class="row">
           <div class="col-md-12">
+            <button class="btn btn-default" data-toggle="collapse" data-target="#stats-adjective">Show stats</button>
+            <div id="stats-adjective" class="collapse">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category_and_count in adjective_stats.category_counts %}
+                  <tr>
+                    <td>{{ category_and_count.0 }}</td>
+                    <td>{{ category_and_count.1 }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
             <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
               <thead>
               <tr>
@@ -444,6 +516,30 @@
 
         <div class="row">
           <div class="col-md-12">
+            <button class="btn btn-default" data-toggle="collapse" data-target="#stats-adverb">Show stats</button>
+            <div id="stats-adverb" class="collapse">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category_and_count in adverb_stats.category_counts %}
+                  <tr>
+                    <td>{{ category_and_count.0 }}</td>
+                    <td>{{ category_and_count.1 }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
             <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
               <thead>
               <tr>
@@ -538,6 +634,30 @@
                 <input class="form-control" type="submit" value="Add">
               </div>
             </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-default" data-toggle="collapse" data-target="#stats-misc">Show stats</button>
+            <div id="stats-misc" class="collapse">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category_and_count in misc_stats.category_counts %}
+                  <tr>
+                    <td>{{ category_and_count.0 }}</td>
+                    <td>{{ category_and_count.1 }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 

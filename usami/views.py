@@ -142,11 +142,11 @@ def delete_misc(request, misc_id):
     return _render_home(request, 'miscs')
 
 def _render_home(request, active_pos=None, active_lang='jp'):
-    #noun_stats = _get_noun_stats()
-    #verb_stats = _get_verb_stats()
-    #adjective_stats = _get_adjective_stats()
-    #adverb_stats = _get_adverb_stats()
-    #misc_stats = _get_misc_stats()
+    noun_stats = _get_noun_stats()
+    verb_stats = _get_verb_stats()
+    adjective_stats = _get_adjective_stats()
+    adverb_stats = _get_adverb_stats()
+    misc_stats = _get_misc_stats()
     return render(
         request,
         'usami/home.html',
@@ -165,6 +165,12 @@ def _render_home(request, active_pos=None, active_lang='jp'):
             'total_adjectives': len(_get_all_adjectives()),
             'total_adverbs': len(_get_all_adverbs()),
             'total_miscs': len(_get_all_miscs()),
+
+            'noun_stats': noun_stats,
+            'verb_stats': verb_stats,
+            'adjective_stats': adjective_stats,
+            'adverb_stats': adverb_stats,
+            'misc_stats': misc_stats,
         }
     )
 
@@ -309,13 +315,16 @@ def _get_misc_stats():
 def _get_vocab_stats(vocabs):
     stats = {}
     stats['category_counts'] = _get_category_counts(vocabs)
-    print(stats['category_counts'])
     return stats
 
-def _get_category_counts(vocabs):
+def _get_category_counts(vocabs, ordered_by_count=True):
     categories_all = [vocab.category for vocab in vocabs]
     categories_unique = sorted(set(categories_all))
     category_counts = []
     for category in categories_unique:
         category_counts.append((category, categories_all.count(category)))
+
+    if ordered_by_count:
+        category_counts = sorted(category_counts, key=lambda x: -x[1])
+
     return category_counts
