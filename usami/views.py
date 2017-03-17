@@ -18,13 +18,12 @@ def edit_noun(request, noun_id):
     if request.method == 'POST':
         form = NounForm(request.POST)
         if form.is_valid():
-            Noun.objects.filter(id=noun_id).update(
-                vocab=form.cleaned_data.get('vocab', ""),
-                phonetic=form.cleaned_data.get('phonetic', ""),
-                english=form.cleaned_data.get('english', ""),
-                category=form.cleaned_data.get('category', "")
-            )
             noun_edited = Noun.objects.filter(id=noun_id).first()
+            noun_edited.vocab    = form.cleaned_data.get('vocab', "")
+            noun_edited.phonetic = form.cleaned_data.get('phonetic', "")
+            noun_edited.english  = form.cleaned_data.get('english', "")
+            noun_edited.category = form.cleaned_data.get('category', "")
+            noun_edited.save()
             active_lang = noun_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(noun_edited))
     if active_lang:
@@ -36,15 +35,14 @@ def edit_verb(request, verb_id):
     if request.method == 'POST':
         form = VerbForm(request.POST)
         if form.is_valid():
-            Verb.objects.filter(id=verb_id).update(
-                vocab=form.cleaned_data.get('vocab', ""),
-                phonetic=form.cleaned_data.get('phonetic', ""),
-                english=form.cleaned_data.get('english', ""),
-                category=form.cleaned_data.get('category', ""),
-                transitivity=form.cleaned_data.get('transitivity', ""),
-                jp_type=form.cleaned_data.get('jp_type', "")
-            )
             verb_edited = Verb.objects.filter(id=verb_id).first()
+            verb_edited.vocab        = form.cleaned_data.get('vocab', "")
+            verb_edited.phonetic     = form.cleaned_data.get('phonetic', "")
+            verb_edited.english      = form.cleaned_data.get('english', "")
+            verb_edited.category     = form.cleaned_data.get('category', "")
+            verb_edited.transitivity = form.cleaned_data.get('transitivity', "")
+            verb_edited.jp_type      = form.cleaned_data.get('jp_type', "")
+            verb_edited.save()
             active_lang = verb_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(verb_edited))
     if active_lang:
@@ -56,14 +54,13 @@ def edit_adjective(request, adjective_id):
     if request.method == 'POST':
         form = AdjectiveForm(request.POST)
         if form.is_valid():
-            Adjective.objects.filter(id=adjective_id).update(
-                vocab=form.cleaned_data.get('vocab', ""),
-                phonetic=form.cleaned_data.get('phonetic', ""),
-                english=form.cleaned_data.get('english', ""),
-                category=form.cleaned_data.get('category', ""),
-                jp_type=form.cleaned_data.get('jp_type', "")
-            )
             adjective_edited = Adjective.objects.filter(id=adjective_id).first()
+            adjective_edited.vocab    = form.cleaned_data.get('vocab', "")
+            adjective_edited.phonetic = form.cleaned_data.get('phonetic', "")
+            adjective_edited.english  = form.cleaned_data.get('english', "")
+            adjective_edited.category = form.cleaned_data.get('category', "")
+            adjective_edited.jp_type  = form.cleaned_data.get('jp_type', "")
+            adjective_edited.save()
             active_lang = adjective_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(adjective_edited))
     if active_lang:
@@ -75,13 +72,12 @@ def edit_adverb(request, adverb_id):
     if request.method == 'POST':
         form = AdverbForm(request.POST)
         if form.is_valid():
-            Adverb.objects.filter(id=adverb_id).update(
-                vocab=form.cleaned_data.get('vocab', ""),
-                phonetic=form.cleaned_data.get('phonetic', ""),
-                english=form.cleaned_data.get('english', ""),
-                category=form.cleaned_data.get('category', "")
-            )
             adverb_edited = Adverb.objects.filter(id=adverb_id).first()
+            adverb_edited.vocab=form.cleaned_data.get('vocab', "")
+            adverb_edited.phonetic=form.cleaned_data.get('phonetic', "")
+            adverb_edited.english=form.cleaned_data.get('english', "")
+            adverb_edited.category=form.cleaned_data.get('category', "")
+            adverb_edited.save()
             active_lang = adverb_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(adverb_edited))
     if active_lang:
@@ -93,13 +89,12 @@ def edit_misc(request, misc_id):
     if request.method == 'POST':
         form = MiscForm(request.POST)
         if form.is_valid():
-            Misc.objects.filter(id=misc_id).update(
-                vocab=form.cleaned_data.get('vocab', ""),
-                phonetic=form.cleaned_data.get('phonetic', ""),
-                english=form.cleaned_data.get('english', ""),
-                category=form.cleaned_data.get('category', "")
-            )
             misc_edited = Misc.objects.filter(id=misc_id).first()
+            misc_edited.vocab=form.cleaned_data.get('vocab', "")
+            misc_edited.phonetic=form.cleaned_data.get('phonetic', "")
+            misc_edited.english=form.cleaned_data.get('english', "")
+            misc_edited.category=form.cleaned_data.get('category', "")
+            misc_edited.save()
             active_lang = misc_edited.lang
             messages.add_message(request, messages.INFO, "Edited: {}".format(misc_edited))
     if active_lang:
@@ -140,6 +135,19 @@ def delete_misc(request, misc_id):
     misc.delete()
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(misc_deleted))
     return _render_home(request, 'miscs')
+
+def archive_noun(request, noun_id):
+    noun_archived = Noun.objects.filter(id=noun_id).first()
+    noun_archived.archived = True
+    noun_archived.save()
+    messages.add_message(request, messages.INFO, "Archived: {}".format(noun_archived))
+    return _render_home(request, 'nouns')
+
+def unarchive_noun(request, noun_id):
+    noun_unarchived = Noun.objects.filter(id=noun_id).first()
+    noun_unarchived.archived = False
+    messages.add_message(request, messages.INFO, "Unarchived: {}".format(noun_unarchived))
+    return _render_home(request, 'nouns')
 
 def _render_home(request, active_pos=None, active_lang='jp'):
     noun_stats = _get_noun_stats()

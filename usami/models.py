@@ -26,6 +26,7 @@ class PosBase(models.Model):
     phonetic = models.CharField(max_length=32, null=True)
     english = models.CharField(max_length=32, null=True)
     category = models.CharField(max_length=32, null=True)
+    archived = models.BooleanField(default=False)
 
     def __str__(self):
         return "[{}-{}] {} ({})".format(self.__class__.__name__, self.lang, self.vocab, self.english)
