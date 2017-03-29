@@ -9,7 +9,6 @@ def get_furigana(kanji, furigana_delimiter=","):
     with sqlite3.connect(DB_PATH) as conn:
         c = conn.cursor()
 
-
         # Binding not working properly for some reason
         #c.execute("SELECT furigana_split FROM kanji_furigana WHERE kanji = ?", kanji)
         sql = "SELECT furigana_split FROM kanji_furigana WHERE kanji = '{}'".format(kanji)

@@ -15,7 +15,7 @@
       <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
-        <li>Archive "learned" vocab</li>
+        <li>Archive/unarchive "learned" vocab</li>
         <li>Filter on category (etc.)</li>
         <li>More stats</li>
         <li>Toggle phonetic on/off</li>
@@ -140,6 +140,7 @@
                   <td class="vocab vocab-buttons">
                     <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{{ noun.0.id }}">Edit</a>
                     <a class="btn btn-danger" href="{% url 'delete_noun' noun.0.id %}">Delete</a>
+                    <a class="btn btn-success" href="{% url 'archive_noun' noun.0.id %}">Archive</a>
                   </td>
                 </tr>
                 <div class="modal fade" id="noun-form-{{ noun.0.id }}" tabindex="-1" role="dialog"

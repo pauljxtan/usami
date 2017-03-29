@@ -160,6 +160,12 @@ def _render_home(request, active_pos=None, active_lang='jp'):
             'adverbs': _get_all_adverbs_with_ruby("・"),
             'miscs': _get_all_miscs_with_ruby("・"),
 
+            'nouns_archived': _get_all_nouns_with_ruby("・", archived=True),
+            'verbs_archived': _get_all_verbs_with_ruby("・", archived=True),
+            'adjectives_archived': _get_all_adjectives_with_ruby("・", archived=True),
+            'adverbs_archived': _get_all_adverbs_with_ruby("・", archived=True),
+            'miscs_archived': _get_all_miscs_with_ruby("・", archived=True),
+
             'active_pos': active_pos,
             'active_lang': active_lang,
 
@@ -258,33 +264,33 @@ def _add_misc(request, lang):
             messages.add_message(request, messages.SUCCESS, "Added: {}".format(misc_added))
     return _render_home(request, 'miscs', lang)
 
-def _get_all_nouns(): return Noun.objects.all()
-def _get_all_verbs(): return Verb.objects.all()
-def _get_all_adjectives(): return Adjective.objects.all()
-def _get_all_adverbs(): return Adverb.objects.all()
-def _get_all_miscs(): return Misc.objects.all()
+def _get_all_nouns(archived=False):      return Noun.objects.filter(archived=archived)
+def _get_all_verbs(archived=False):      return Verb.objects.filter(archived=archived)
+def _get_all_adjectives(archived=False): return Adjective.objects.filter(archived=archived)
+def _get_all_adverbs(archived=False):    return Adverb.objects.filter(archived=archived)
+def _get_all_miscs(archived=False):      return Misc.objects.filter(archived=archived)
 
-def _get_all_nouns_with_ruby(phonetic_split_str):
-    nouns = _get_all_nouns()
+def _get_all_nouns_with_ruby(phonetic_split_str, archived=False):
+    nouns = _get_all_nouns(archived)
     return _get_vocabs_with_ruby(nouns, phonetic_split_str)
 
-def _get_all_verbs_with_ruby(phonetic_split_str):
-    verbs = _get_all_verbs()
+def _get_all_verbs_with_ruby(phonetic_split_str, archived=False):
+    verbs = _get_all_verbs(archived)
     return _get_vocabs_with_ruby(verbs, phonetic_split_str)
 
-def _get_all_adjectives_with_ruby(phonetic_split_str):
-    adjectives = _get_all_adjectives()
+def _get_all_adjectives_with_ruby(phonetic_split_str, archived=False):
+    adjectives = _get_all_adjectives(archived)
     return _get_vocabs_with_ruby(adjectives, phonetic_split_str)
 
-def _get_all_adverbs_with_ruby(phonetic_split_str):
-    adverbs = _get_all_adverbs()
+def _get_all_adverbs_with_ruby(phonetic_split_str, archived=False):
+    adverbs = _get_all_adverbs(archived)
     return _get_vocabs_with_ruby(adverbs, phonetic_split_str)
 
-def _get_all_miscs_with_ruby(phonetic_split_str):
-    miscs = _get_all_miscs()
+def _get_all_miscs_with_ruby(phonetic_split_str, archived=False):
+    miscs = _get_all_miscs(archived)
     return _get_vocabs_with_ruby(miscs, phonetic_split_str)
 
-def _get_vocabs_with_ruby(vocabs, phonetic_split_str):
+def _get_vocabs_with_ruby(vocabs, phonetic_split_str, archived=False):
     vocabs_with_ruby = []
     for vocab in vocabs:
         phonetic_split = vocab.phonetic.split(phonetic_split_str)
