@@ -16,6 +16,11 @@ The idea is to introduce loads more useful features that would make it more than
 
 ---
 
+Snapshot (17/03/29)
+![170329](usami_170329.JPG)
+
+---
+
 ##### My thoughts/ramblings, feel free to stop reading here
 
 ##### 2017-03-06
