@@ -39,8 +39,8 @@
   <!-- TODO: Show active button(s) -->
   <div class="row">
     <div class="col-md-12">
-      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
-      <button class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-zh">中文</button>
+      <button id="btn-collapse-jp" class="btn btn-primary btn-collapse{% if active_lang == 'jp' %} active{% endif %}" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
+      <button id="btn-collapse-zh" class="btn btn-primary btn-collapse" data-toggle="collapse" data-target="#collapse-zh">中文</button>
     </div>
   </div>
 
@@ -121,8 +121,8 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc"
-            data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>
+            <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+{#            data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -261,8 +261,8 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc"
-              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -411,8 +411,8 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc"
-              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -544,8 +544,8 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc"
-              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -668,8 +668,8 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc"
-              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>
+            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -754,7 +754,17 @@
 
   <script>
     $(document).ready(function() {
-      // TODO...
+      var langs = ["jp", "zh"];
+      for (var i = 0; i < langs.length; i++) {
+        var idDivCollapse = '#collapse-' + langs[i];
+        var idBtnCollapse = '#btn-collapse-' + langs[i];
+        $(idDivCollapse).on('show.bs.collapse', { btnId: idBtnCollapse }, function(event) {
+          $(event.data.btnId).addClass('active');
+        });
+        $(idDivCollapse).on('hide.bs.collapse', { btnId: idBtnCollapse }, function(event) {
+          $(event.data.btnId).removeClass('active');
+        });
+      }
     });
   </script>
 
