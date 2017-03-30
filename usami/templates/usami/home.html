@@ -15,6 +15,7 @@
       <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
+        <li>AJAX!</li>
         <li>Archive/unarchive "learned" vocab</li>
         <li>Filter on category (etc.)</li>
         <li>More stats</li>
@@ -131,7 +132,7 @@
                 <th>Actions</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody id="table-nouns-tbody">
               {% for noun in nouns %}
                 <tr class="vocab-row vocab-row-{{ noun.0.type }}">
                   <td class="vocab vocab-vocab">{{ noun.1 | safe }}</td>
@@ -766,6 +767,8 @@
           $(event.data.btnId).removeClass('active');
         });
       }
+
+      getAllNouns();
     });
   </script>
 

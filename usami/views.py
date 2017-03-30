@@ -1,11 +1,21 @@
+import json
+
 from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from usami.forms import NounForm, VerbForm, AdjectiveForm, AdverbForm, MiscForm
 from usami.models import Noun, Verb, Adjective, Adverb, Misc
+from usami.serialization import get_serializable_noun
 
 def home(request):
     return _render_home(request)
+
+def get_all_nouns_jp(request):
+    nouns = _get_all_nouns_with_ruby("・")
+    data = json.dumps([(get_serializable_noun(noun[0]), noun[1]) for noun in nouns])
+    print(data)
+    return HttpResponse(data)#, content_type="application/json")
 
 def add_noun_jp(request):      return _add_noun(request, 'jp')
 def add_verb_jp(request):      return _add_verb(request, 'jp')
