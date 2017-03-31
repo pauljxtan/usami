@@ -16,6 +16,7 @@
       <h1>TODO</h1>
       <ul>
         <li>AJAX!</li>
+        <li>Store table rows in JSON file (reduce DB overhead)</li>
         <li>Archive/unarchive "learned" vocab</li>
         <li>Filter on category (etc.)</li>
         <li>More stats</li>
@@ -25,6 +26,7 @@
     </div>
   </div>
 
+  <!-- TODO: deprecate this ASAP -->
   {% if messages %}
     {% for message in messages %}
       <div class="row">
@@ -36,6 +38,15 @@
       </div>
     {% endfor %}
   {% endif %}
+
+  <div class="row">
+    <div class="col-md-12">
+        <div id="div-message">
+          <span id="span-message" class="lead"></span>
+        </div>
+    </div>
+  </div>
+
 
   <!-- TODO: Show active button(s) -->
   <div class="row">
@@ -49,8 +60,11 @@
 
     <div class="row">
       <div class="col-md-12">
-        <p class="lead"><span id="total-nouns">0</span> nouns ・ <span id="total-verbs">0</span> verbs ・
-          <span id="total-adjectives">0</span> adjectives ・ <span id="total-adverbs">0</span> adverbs ・ <span id="total-miscs">0</span> misc</p>
+        <p><span id="total-nouns">0</span> nouns (<span id="total-nouns-archived">0</span> archived) ・
+          <span id="total-verbs">0</span> verbs (<span id="total-verbs-archived">0</span> archived) ・
+          <span id="total-adjectives">0</span> adjectives (<span id="total-adjectives-archived">0</span> archived) ・
+          <span id="total-adverbs">0</span> adverbs (<span id="total-adverbs-archived">0</span> archived) ・
+          <span id="total-miscs">0</span> misc (<span id="total-miscs-archived">0</span> archived)</p>
       </div>
     </div>
 

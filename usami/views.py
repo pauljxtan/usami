@@ -3,7 +3,7 @@ import json
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.middleware.csrf import get_token
+# from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
 
 from usami.forms import NounForm, VerbForm, AdjectiveForm, AdverbForm, MiscForm
@@ -14,57 +14,25 @@ def home(request):
 
 def get_nouns_rows_jp(request):
     rows = []
-    nouns = _get_all_nouns_with_ruby("・")
+    nouns = _get_all_nouns()
     for noun in nouns:
-        id = noun[0].id
-        english = noun[0].english
-        category = noun[0].category
-        ruby = noun[1]
         row = {
-            'vocab': ruby,
-            'english': english,
-            'category': category,
+            'vocab': _get_ruby(noun, "・"),
+            'english': noun.english,
+            'category': noun.category,
             'buttons': """
             <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{0}">Edit</a>
-            <a class="btn btn-danger" href="/noun/delete/{0}/">Delete</a>
-            <a class="btn btn-success" href="/noun/archive/{0}/">Archive</a>
-            """.format(id)
+            <a class="btn btn-danger" onclick="deleteNoun({0})">Delete</a>
+            <a class="btn btn-success" onclick="archiveNoun({0})">Archive</a>
+            """.format(noun.id)
         }
         rows.append(row)
     return HttpResponse(json.dumps(rows))
 
-# def get_nouns_tbody_jp(request):
-#     html = ""
-#     nouns = _get_all_nouns_with_ruby("・")
-#     for noun in nouns:
-#         id = noun[0].id
-#         english = noun[0].english
-#         category = noun[0].category
-#         ruby = noun[1]
-#         html += """
-#         <tr class="vocab-row">
-#           <td class="vocab vocab-vocab">{0}</td>
-#           <td class="vocab vocab-english">{1}</td>
-#           <td class="vocab vocab-category">{2}</td>
-#           <td class="vocab vocab-buttons">
-#             <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{3}">Edit</a>
-#             <a class="btn btn-danger" href="/noun/delete/{3}/">Delete</a>
-#             <a class="btn btn-success" href="/noun/archive/{3}/">Archive</a>
-#           </td>
-#         </tr>
-#         """.format(ruby, english, category, id)
-#     return HttpResponse(html)
-
 def get_nouns_modals_jp(request):
     html = ""
-    nouns = _get_all_nouns_with_ruby("・")
+    nouns = _get_all_nouns()
     for noun in nouns:
-        id = noun[0].id
-        vocab = noun[0].vocab
-        phonetic = noun[0].phonetic
-        english = noun[0].english
-        category = noun[0].category
-        ruby = noun[1]
         html += """
         <div class="modal fade" id="noun-form-{3}" tabindex="-1" role="dialog" aria-labelledby="noun-form-label-{3}">
           <div class="modal-dialog" role="document">
@@ -98,7 +66,7 @@ def get_nouns_modals_jp(request):
             </div>
           </div>
         </div>
-        """.format(ruby, english, category, id, vocab, phonetic, get_token(request))
+        """.format(_get_ruby(noun, "・"), noun.english, noun.category, noun.id, noun.vocab, noun.phonetic)
     return HttpResponse(html)
 
 @csrf_exempt
@@ -196,12 +164,18 @@ def edit_misc(request, misc_id):
         return _render_home(request, 'miscs', active_lang)
     return _render_home(request, 'miscs')
 
+@csrf_exempt
 def delete_noun(request, noun_id):
     noun = Noun.objects.filter(id=noun_id)
     noun_deleted = noun.first()
     noun.delete()
-    messages.add_message(request, messages.WARNING, "Deleted: {}".format(noun_deleted))
-    return _render_home(request, 'nouns')
+    data = {
+        'message': {
+            'text': "Deleted: {}".format(noun_deleted),
+            'level': 'warning',
+        }
+    }
+    return HttpResponse(json.dumps(data))
 
 def delete_verb(request, verb_id):
     verb = Verb.objects.filter(id=verb_id)
@@ -231,12 +205,18 @@ def delete_misc(request, misc_id):
     messages.add_message(request, messages.WARNING, "Deleted: {}".format(misc_deleted))
     return _render_home(request, 'miscs')
 
+@csrf_exempt
 def archive_noun(request, noun_id):
     noun_archived = Noun.objects.filter(id=noun_id).first()
     noun_archived.archived = True
     noun_archived.save()
-    messages.add_message(request, messages.INFO, "Archived: {}".format(noun_archived))
-    return _render_home(request, 'nouns')
+    data = {
+        'message': {
+            'text': "Archived: {}".format(noun_archived),
+            'level': 'info',
+        }
+    }
+    return HttpResponse(json.dumps(data))
 
 def unarchive_noun(request, noun_id):
     noun_unarchived = Noun.objects.filter(id=noun_id).first()
@@ -251,6 +231,12 @@ def get_totals(request):
         'total_adjectives': len(_get_all_adjectives()),
         'total_adverbs': len(_get_all_adverbs()),
         'total_miscs': len(_get_all_miscs()),
+
+        'total_nouns_archived': len(_get_all_nouns(archived=True)),
+        'total_verbs_archived': len(_get_all_verbs(archived=True)),
+        'total_adjectives_archived': len(_get_all_adjectives(archived=True)),
+        'total_adverbs_archived': len(_get_all_adverbs(archived=True)),
+        'total_miscs_archived': len(_get_all_miscs(archived=True)),
     }
     return HttpResponse(json.dumps(totals))
 
@@ -288,7 +274,6 @@ def _render_home(request, active_pos=None, active_lang='jp'):
         }
     )
 
-@csrf_exempt
 def _add_noun(request, lang):
     noun_added = None
     if request.method == 'POST':
@@ -301,12 +286,16 @@ def _add_noun(request, lang):
                 english=form.cleaned_data.get('english', ""),
                 category=form.cleaned_data.get('category', "")
             )
-            messages.add_message(request, messages.SUCCESS, "Added: {}".format(noun_added))
         else:
-            # TODO: Display message indicating invalid form
+            # TODO: Handle invalid input(s)
             pass
-    # return _render_home(request, 'nouns', lang)
-    return HttpResponse("success")
+    data = {
+        'message': {
+            'text': "Added: {}".format(noun_added),
+            'level': 'success',
+        }
+    }
+    return HttpResponse(json.dumps(data))
 
 def _add_verb(request, lang):
     verb_added = None
@@ -397,15 +386,18 @@ def _get_all_miscs_with_ruby(phonetic_split_str, archived=False):
     miscs = _get_all_miscs(archived)
     return _get_vocabs_with_ruby(miscs, phonetic_split_str)
 
+def _get_ruby(vocab, phonetic_split_str):
+    phonetic_split = vocab.phonetic.split(phonetic_split_str)
+    ruby = ""
+    if len(phonetic_split) == len(vocab.vocab):
+        for i, v in enumerate(vocab.vocab):
+            ruby += "<ruby>{}<rp>(</rp><rt>{}</rt><rp>)</rp></ruby>".format(v, phonetic_split [i])
+    return ruby
+
 def _get_vocabs_with_ruby(vocabs, phonetic_split_str, archived=False):
     vocabs_with_ruby = []
     for vocab in vocabs:
-        phonetic_split = vocab.phonetic.split(phonetic_split_str)
-        vocab_ruby = ""
-        if len(phonetic_split) == len(vocab.vocab):
-            for i, v in enumerate(vocab.vocab):
-                vocab_ruby += "<ruby>{}<rp>(</rp><rt>{}</rt><rp>)</rp></ruby>".format(v, phonetic_split [i])
-        vocabs_with_ruby.append((vocab, vocab_ruby))
+        vocabs_with_ruby.append((vocab, _get_ruby(vocab, phonetic_split_str)))
     return vocabs_with_ruby
 
 def _get_noun_stats():
