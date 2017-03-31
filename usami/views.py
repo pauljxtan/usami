@@ -3,88 +3,105 @@ import json
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
 
 from usami.forms import NounForm, VerbForm, AdjectiveForm, AdverbForm, MiscForm
 from usami.models import Noun, Verb, Adjective, Adverb, Misc
-from usami.serialization import get_serializable_noun
 
 def home(request):
     return _render_home(request)
 
-def get_all_nouns_jp(request):
+def get_nouns_rows_jp(request):
+    rows = []
     nouns = _get_all_nouns_with_ruby("・")
-    data = json.dumps([(get_serializable_noun(noun[0]), noun[1]) for noun in nouns])
-    print(data)
-    return HttpResponse(data)#, content_type="application/json")
+    for noun in nouns:
+        id = noun[0].id
+        english = noun[0].english
+        category = noun[0].category
+        ruby = noun[1]
+        row = {
+            'vocab': ruby,
+            'english': english,
+            'category': category,
+            'buttons': """
+            <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{0}">Edit</a>
+            <a class="btn btn-danger" href="/noun/delete/{0}/">Delete</a>
+            <a class="btn btn-success" href="/noun/archive/{0}/">Archive</a>
+            """.format(id)
+        }
+        rows.append(row)
+    return HttpResponse(json.dumps(rows))
 
-def get_noun_tab_jp(request):
+# def get_nouns_tbody_jp(request):
+#     html = ""
+#     nouns = _get_all_nouns_with_ruby("・")
+#     for noun in nouns:
+#         id = noun[0].id
+#         english = noun[0].english
+#         category = noun[0].category
+#         ruby = noun[1]
+#         html += """
+#         <tr class="vocab-row">
+#           <td class="vocab vocab-vocab">{0}</td>
+#           <td class="vocab vocab-english">{1}</td>
+#           <td class="vocab vocab-category">{2}</td>
+#           <td class="vocab vocab-buttons">
+#             <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{3}">Edit</a>
+#             <a class="btn btn-danger" href="/noun/delete/{3}/">Delete</a>
+#             <a class="btn btn-success" href="/noun/archive/{3}/">Archive</a>
+#           </td>
+#         </tr>
+#         """.format(ruby, english, category, id)
+#     return HttpResponse(html)
+
+def get_nouns_modals_jp(request):
     html = ""
     nouns = _get_all_nouns_with_ruby("・")
     for noun in nouns:
         id = noun[0].id
         vocab = noun[0].vocab
+        phonetic = noun[0].phonetic
         english = noun[0].english
         category = noun[0].category
         ruby = noun[1]
-
         html += """
-        <tr class="vocab-row">
-        <td class="vocab vocab-vocab">{}</td>
-        <td class="vocab vocab-english">{}</td>
-        <td class="vocab vocab-category">{}</td>
-        <td class="vocab vocab-buttons">
-        <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{}">Edit</a>
-        <a class="btn btn-danger" href="/noun/delete/{}/">Delete</a>
-        <a class="btn btn-success" href="/noun/archive/{}/">Archive</a>
-        </td>
-        </tr>
-        """.format(ruby, english, category, id, id, id)
-# <div class="modal fade" id="noun-form-{{ noun.0.id }}" tabindex="-1" role="dialog"
-# aria-labelledby="noun-form-label-{{ noun.0.id }}">
-# <div class="modal-dialog" role="document">
-# <div class="modal-content">
-# <div class="modal-header">
-# <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-# <h4 class="modal-title" id="noun-form-label-{{ noun.0.id }}">Edit {{ noun.1 | safe }}</h4>
-# </div>
-# <div class="modal-body">
-# <form class="form-inline" action="{% url 'edit_noun' noun.0.id %}" method="post">
-# {% csrf_token %}
-# <div class="form-group">
-# <label for="id_vocab">Vocab:</label>
-# <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required=""
-# value="{{ noun.0.vocab }}">
-# </div>
-# <div class="form-group">
-# <label for="id_phonetic">Phonetic:</label>
-# <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required=""
-# value="{{ noun.0.phonetic }}">
-# </div>
-# <div class="form-group">
-# <label for="id_english">English:</label>
-# <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required=""
-# value="{{ noun.0.english }}">
-# </div>
-# <div class="form-group">
-# <label for="id_category">Category:</label>
-# <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required=""
-# value="{{ noun.0.category }}">
-# </div>
-# <div class="modal-footer">
-# <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-# <button type="submit" class="btn btn-primary">Save changes</button>
-# </div>
-# </form>
-# </div>
-# </div>
-# </div>
-# </div>
-#
-# {% endfor %}
-
+        <div class="modal fade" id="noun-form-{3}" tabindex="-1" role="dialog" aria-labelledby="noun-form-label-{3}">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="noun-form-label-{3}">Edit {0}</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="noun-edit-vocab-{3}">Vocab:</label>
+                  <input class="form-control" id="noun-edit-vocab-{3}" maxlength="16" name="vocab" type="text" required="" value="{4}">
+                </div>
+                <div class="form-group">
+                  <label for="noun-edit-phonetic-{3}">Phonetic:</label>
+                  <input class="form-control" id="noun-edit-phonetic-{3}" maxlength="32" name="phonetic" type="text" required="" value="{5}">
+                </div>
+                <div class="form-group">
+                  <label for="noun-edit-english-{3}">English:</label>
+                  <input class="form-control" id="noun-edit-english-{3}" maxlength="32" name="english" type="text" required="" value="{1}">
+                </div>
+                <div class="form-group">
+                  <label for="noun-edit-category-{3}">Category:</label>
+                  <input class="form-control" id="noun-edit-category-{3}" maxlength="32" name="category" type="text" required="" value="{2}">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                 <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        """.format(ruby, english, category, id, vocab, phonetic, get_token(request))
     return HttpResponse(html)
 
-
+@csrf_exempt
 def add_noun_jp(request):      return _add_noun(request, 'jp')
 def add_verb_jp(request):      return _add_verb(request, 'jp')
 def add_adjective_jp(request): return _add_adjective(request, 'jp')
@@ -227,6 +244,16 @@ def unarchive_noun(request, noun_id):
     messages.add_message(request, messages.INFO, "Unarchived: {}".format(noun_unarchived))
     return _render_home(request, 'nouns')
 
+def get_totals(request):
+    totals = {
+        'total_nouns': len(_get_all_nouns()),
+        'total_verbs': len(_get_all_verbs()),
+        'total_adjectives': len(_get_all_adjectives()),
+        'total_adverbs': len(_get_all_adverbs()),
+        'total_miscs': len(_get_all_miscs()),
+    }
+    return HttpResponse(json.dumps(totals))
+
 def _render_home(request, active_pos=None, active_lang='jp'):
     return render(
         request,
@@ -261,6 +288,7 @@ def _render_home(request, active_pos=None, active_lang='jp'):
         }
     )
 
+@csrf_exempt
 def _add_noun(request, lang):
     noun_added = None
     if request.method == 'POST':
@@ -277,7 +305,8 @@ def _add_noun(request, lang):
         else:
             # TODO: Display message indicating invalid form
             pass
-    return _render_home(request, 'nouns', lang)
+    # return _render_home(request, 'nouns', lang)
+    return HttpResponse("success")
 
 def _add_verb(request, lang):
     verb_added = None

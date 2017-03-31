@@ -7,8 +7,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls, name='admin'),
     url(r'^$', usami.views.home, name='home'),
 
-    url(r'jp/nouns/all/', usami.views.get_all_nouns_jp),
-    url(r'jp/nouns/tab/', usami.views.get_noun_tab_jp),
+    url(r'^jp/nouns/rows/', usami.views.get_nouns_rows_jp),
+    # url(r'^jp/nouns/tbody/', usami.views.get_nouns_tbody_jp),
+    url(r'^jp/nouns/modals/', usami.views.get_nouns_modals_jp),
+    url(r'^totals/', usami.views.get_totals),
 
     url(r'^jp/noun/add/', usami.views.add_noun_jp, name='add_noun_jp'),
     url(r'^jp/verb/add/', usami.views.add_verb_jp, name='add_verb_jp'),

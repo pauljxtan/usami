@@ -49,7 +49,8 @@
 
     <div class="row">
       <div class="col-md-12">
-        <p class="lead">{{ total_nouns }} nouns ・ {{ total_verbs }} verbs ・ {{ total_adjectives }} adjectives ・ {{ total_adverbs }} adverbs ・ {{ total_miscs }} misc</p>
+        <p class="lead"><span id="total-nouns">0</span> nouns ・ <span id="total-verbs">0</span> verbs ・
+          <span id="total-adjectives">0</span> adjectives ・ <span id="total-adverbs">0</span> adverbs ・ <span id="total-miscs">0</span> misc</p>
       </div>
     </div>
 
@@ -71,28 +72,26 @@
 
         <div class="row">
           <div class="col-md-12">
-            <form class="form-inline" action="{% url 'add_noun_jp' %}" method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <label for="id_vocab">Vocab:</label>
-                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_phonetic">Phonetic:</label>
-                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_english">English:</label>
-                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_category">Category:</label>
-                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-              </div>
-              <div class="form-group">
-                <input class="form-control" type="submit" value="Add">
-              </div>
-            </form>
+            <div class="col-md-2">
+              <label for="input-noun-add-vocab">Vocab:</label>
+              <input id="input-noun-add-vocab" class="form-control" maxlength="16" type="text" placeholder="漢字">
+            </div>
+            <div class="col-md-3">
+              <label for="input-noun-add-phonetic">Phonetic:</label>
+              <input id="input-noun-add-phonetic" class="form-control" maxlength="32" type="text" placeholder="かん・じ">
+            </div>
+            <div class="col-md-3">
+              <label for="input-noun-add-english">English:</label>
+              <input id="input-noun-add-english" class="form-control" maxlength="32" type="text" placeholder="chinese characters">
+            </div>
+            <div class="col-md-2">
+              <label for="input-noun-add-category">Category:</label>
+              <input id="input-noun-add-category" class="form-control" maxlength="32" type="text" placeholder="language">
+            </div>
+            <div class="col-md-1">
+              <label for="btn-noun-add"></label>
+              <button id="btn-noun-add" class="btn btn-success" onclick="addNoun()">Add</button>
+            </div>
           </div>
         </div>
 
@@ -122,71 +121,19 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-{#            data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
+            <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc" >
               <thead>
               <tr>
-                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="vocab" data-sortable="true" data-cell-style="vocabCellStyle">Vocab</th>
                 <th data-field="english" data-sortable="true">English</th>
                 <th data-field="category" data-sortable="true">Category</th>
-                <th>Actions</th>
+                <th data-field="buttons" data-sortable="false">Actions</th>
               </tr>
               </thead>
               <tbody id="table-nouns-tbody">
-              {% for noun in nouns %}
-                <tr class="vocab-row vocab-row-{{ noun.0.type }}">
-                  <td class="vocab vocab-vocab">{{ noun.1 | safe }}</td>
-                  <td class="vocab vocab-english">{{ noun.0.english }}</td>
-                  <td class="vocab vocab-category">{{ noun.0.category }}</td>
-                  <td class="vocab vocab-buttons">
-                    <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{{ noun.0.id }}">Edit</a>
-                    <a class="btn btn-danger" href="{% url 'delete_noun' noun.0.id %}">Delete</a>
-                    <a class="btn btn-success" href="{% url 'archive_noun' noun.0.id %}">Archive</a>
-                  </td>
-                </tr>
-                <div class="modal fade" id="noun-form-{{ noun.0.id }}" tabindex="-1" role="dialog"
-                     aria-labelledby="noun-form-label-{{ noun.0.id }}">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="noun-form-label-{{ noun.0.id }}">Edit {{ noun.1 | safe }}</h4>
-                      </div>
-                      <div class="modal-body">
-                        <form class="form-inline" action="{% url 'edit_noun' noun.0.id %}" method="post">
-                          {% csrf_token %}
-                          <div class="form-group">
-                            <label for="id_vocab">Vocab:</label>
-                            <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required=""
-                                   value="{{ noun.0.vocab }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_phonetic">Phonetic:</label>
-                            <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required=""
-                                   value="{{ noun.0.phonetic }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_english">English:</label>
-                            <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required=""
-                                   value="{{ noun.0.english }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_category">Category:</label>
-                            <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required=""
-                                   value="{{ noun.0.category }}">
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
               </tbody>
             </table>
+            <div id="div-nouns-modals"></div>
           </div>
         </div>
 
@@ -263,7 +210,6 @@
         <div class="row">
           <div class="col-md-12">
             <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -413,7 +359,6 @@
         <div class="row">
           <div class="col-md-12">
             <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -546,7 +491,6 @@
         <div class="row">
           <div class="col-md-12">
             <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -670,7 +614,6 @@
         <div class="row">
           <div class="col-md-12">
             <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
-{#              data-show-multi-sort="true" data-sort-priority='[{"sortName":"category","sortOrder":"asc"},{"sortName":"english","sortOrder":"asc"}]'>#}
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true">Vocab</th>
@@ -767,8 +710,8 @@
         });
       }
 
-      //getAllNouns();
-      //getNounsTab();
+      getTotals();
+      loadNouns();
     });
   </script>
 
