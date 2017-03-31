@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^$', usami.views.home, name='home'),
 
     url(r'jp/nouns/all/', usami.views.get_all_nouns_jp),
+    url(r'jp/nouns/tab/', usami.views.get_noun_tab_jp),
 
     url(r'^jp/noun/add/', usami.views.add_noun_jp, name='add_noun_jp'),
     url(r'^jp/verb/add/', usami.views.add_verb_jp, name='add_verb_jp'),

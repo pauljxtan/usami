@@ -17,6 +17,74 @@ def get_all_nouns_jp(request):
     print(data)
     return HttpResponse(data)#, content_type="application/json")
 
+def get_noun_tab_jp(request):
+    html = ""
+    nouns = _get_all_nouns_with_ruby("・")
+    for noun in nouns:
+        id = noun[0].id
+        vocab = noun[0].vocab
+        english = noun[0].english
+        category = noun[0].category
+        ruby = noun[1]
+
+        html += """
+        <tr class="vocab-row">
+        <td class="vocab vocab-vocab">{}</td>
+        <td class="vocab vocab-english">{}</td>
+        <td class="vocab vocab-category">{}</td>
+        <td class="vocab vocab-buttons">
+        <a class="btn btn-primary" data-toggle="modal" data-target="#noun-form-{}">Edit</a>
+        <a class="btn btn-danger" href="/noun/delete/{}/">Delete</a>
+        <a class="btn btn-success" href="/noun/archive/{}/">Archive</a>
+        </td>
+        </tr>
+        """.format(ruby, english, category, id, id, id)
+# <div class="modal fade" id="noun-form-{{ noun.0.id }}" tabindex="-1" role="dialog"
+# aria-labelledby="noun-form-label-{{ noun.0.id }}">
+# <div class="modal-dialog" role="document">
+# <div class="modal-content">
+# <div class="modal-header">
+# <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+# <h4 class="modal-title" id="noun-form-label-{{ noun.0.id }}">Edit {{ noun.1 | safe }}</h4>
+# </div>
+# <div class="modal-body">
+# <form class="form-inline" action="{% url 'edit_noun' noun.0.id %}" method="post">
+# {% csrf_token %}
+# <div class="form-group">
+# <label for="id_vocab">Vocab:</label>
+# <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required=""
+# value="{{ noun.0.vocab }}">
+# </div>
+# <div class="form-group">
+# <label for="id_phonetic">Phonetic:</label>
+# <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required=""
+# value="{{ noun.0.phonetic }}">
+# </div>
+# <div class="form-group">
+# <label for="id_english">English:</label>
+# <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required=""
+# value="{{ noun.0.english }}">
+# </div>
+# <div class="form-group">
+# <label for="id_category">Category:</label>
+# <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required=""
+# value="{{ noun.0.category }}">
+# </div>
+# <div class="modal-footer">
+# <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+# <button type="submit" class="btn btn-primary">Save changes</button>
+# </div>
+# </form>
+# </div>
+# </div>
+# </div>
+# </div>
+#
+# {% endfor %}
+
+    return HttpResponse(html)
+
+
 def add_noun_jp(request):      return _add_noun(request, 'jp')
 def add_verb_jp(request):      return _add_verb(request, 'jp')
 def add_adjective_jp(request): return _add_adjective(request, 'jp')
