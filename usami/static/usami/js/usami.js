@@ -1,3 +1,9 @@
+function initPage() {
+  getTotals();
+  loadNouns();
+  loadVerbs();
+}
+
 // Get
 
 function getTotals() {
@@ -27,8 +33,13 @@ function loadTotals(data) {
 }
 
 function loadNouns() {
-  $.get('/jp/nouns/rows/', {}, gotRows);
+  $.get('/jp/nouns/rows/', {}, loadedNouns);
   $('#div-nouns-modals').load('/jp/nouns/modals/');
+}
+
+function loadVerbs() {
+  $.get('/jp/verbs/rows/', {}, loadedVerbs);
+  $('#div-verbs-modals').load('/jp/verbs/modals/');
 }
 
 function loadMessage(data) {
@@ -42,9 +53,16 @@ function loadMessage(data) {
   }, doNothing);
 }
 
-function gotRows(data) {
+function loadedNouns(data) {
   doSomethingWithFade('#table-nouns', function() {
     $('#table-nouns').bootstrapTable('load', JSON.parse(data));
+  }, doNothing);
+}
+
+function loadedVerbs(data) {
+  console.log("Loaded verbs");
+  doSomethingWithFade('#table-verbs', function() {
+    $('#table-verbs').bootstrapTable('load', JSON.parse(data));
   }, doNothing);
 }
 
@@ -64,6 +82,22 @@ function addedNoun(data) {
   loadMessageAndRefreshNouns(data);
 }
 
+function addVerb() {
+  $.post('/jp/verb/add/', {
+        vocab: $('#input-verb-add-vocab').val(),
+        phonetic: $('#input-verb-add-phonetic').val(),
+        english: $('#input-verb-add-english').val(),
+        category: $('#input-verb-add-category').val(),
+        transitivity: $('#select-verb-add-transitivity').val(),
+        jp_type: $('#select-verb-add-jp-type').val()
+      },
+      addedVerb);
+}
+
+function addedVerb(data) {
+  loadMessageAndRefreshVerbs(data);
+}
+
 function deleteNoun(id) {
   // TODO: Get confirmation
   $.post('/noun/delete/'+id+'/', {}, deletedNoun);
@@ -71,6 +105,14 @@ function deleteNoun(id) {
 
 function deletedNoun(data) {
   loadMessageAndRefreshNouns(data);
+}
+
+function deleteVerb(id) {
+  $.post('/verb/delete/'+id+'/', {}, deletedVerb);
+}
+
+function deletedVerb(data) {
+  loadMessageAndRefreshVerbs(data);
 }
 
 function archiveNoun(id) {
@@ -82,10 +124,24 @@ function archivedNoun(data) {
   loadMessageAndRefreshNouns(data);
 }
 
+function archiveVerb(id) {
+  $.post('/verb/archive/'+id+'/', {}, archivedVerb);
+}
+
+function archivedVerb(data) {
+  loadMessageAndRefreshVerbs(data);
+}
+
 function loadMessageAndRefreshNouns(data) {
   loadMessage(data);
   getTotals();
   loadNouns();
+}
+
+function loadMessageAndRefreshVerbs(data) {
+  loadMessage(data);
+  getTotals();
+  loadVerbs();
 }
 
 // Extensions

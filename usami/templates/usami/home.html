@@ -135,7 +135,7 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" id="table-nouns" data-toggle="table" data-sort-name="category" data-sort-order="asc" >
+            <table id="table-nouns" class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc" >
               <thead>
               <tr>
                 <th data-field="vocab" data-sortable="true" data-cell-style="vocabCellStyle">Vocab</th>
@@ -157,43 +157,41 @@
 
         <div class="row">
           <div class="col-md-12">
-            <form class="form-inline" action="{% url 'add_verb_jp' %}" method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <label for="id_vocab">Vocab:</label>
-                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_phonetic">Phonetic:</label>
-                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_english">English:</label>
-                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_category">Category:</label>
-                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_transitivity">Transitivity:</label>
-                <select class="form-control" id="id_transitivity" name="transitivity" required="">
-                  <option value="t">t</option>
-                  <option value="i">i</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="id_jp_type">Jp type:</label>
-                <select class="form-control" id="id_jp_type" name="jp_type" required="">
-                  <option value="u">u</option>
-                  <option value="r">ru</option>
-                  <option value="e">ex</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <input class="form-control" type="submit" value="Add">
-              </div>
-            </form>
+            <div class="col-md-2">
+              <label for="input-verb-add-vocab">Vocab:</label>
+              <input id="input-verb-add-vocab" class="form-control" maxlength="16" type="text" placeholder="書く">
+            </div>
+            <div class="col-md-2">
+              <label for="input-verb-add-phonetic">Phonetic:</label>
+              <input id="input-verb-add-phonetic" class="form-control" maxlength="32" type="text" placeholder="か・">
+            </div>
+            <div class="col-md-2">
+              <label for="input-verb-add-english">English:</label>
+              <input id="input-verb-add-english" class="form-control" maxlength="32" type="text" placeholder="write">
+            </div>
+            <div class="col-md-2">
+              <label for="input-verb-add-category">Category:</label>
+              <input id="input-verb-add-category" class="form-control" maxlength="32" type="text" placeholder="language">
+            </div>
+            <div class="col-md-2">
+              <label for="select-verb-add-transitivity">Transitivity:</label>
+              <select id="select-verb-add-transitivity" class="form-control">
+                <option value="t">t</option>
+                <option value="i">i</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="select-verb-add-jp-type">Type:</label>
+              <select id="select-verb-add-jp-type" class="form-control">
+                <option value="u">u</option>
+                <option value="ru">ru</option>
+                <option value="ex">ex</option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <label for="btn-verb-add"></label>
+              <button id="btn-verb-add" class="btn btn-success" onclick="addVerb()">Add</button>
+            </div>
           </div>
         </div>
 
@@ -223,88 +221,22 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+            <table id="table-verbs" class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
               <thead>
               <tr>
-                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="vocab" data-sortable="true" data-cell-style="vocabCellStyle">Vocab</th>
                 <th data-field="english" data-sortable="true">English</th>
                 <th data-field="category" data-sortable="true">Category</th>
                 <th data-field="transitivity" data-sortable="true">Transitivity</th>
                 <th data-field="jp_type" data-sortable="true">Type</th>
+                <th data-field="buttons" data-sortable="false">Actions</th>
                 <th></th>
               </tr>
               </thead>
               <tbody>
-              {% for verb in verbs %}
-                <tr class="vocab-row vocab-row-{{ verb.0.type }}">
-                  <td class="vocab vocab-vocab">{{ verb.1 | safe }}</td>
-                  <td class="vocab vocab-english">{{ verb.0.english }}</td>
-                  <td class="vocab vocab-category">{{ verb.0.category }}</td>
-                  <td class="vocab vocab-transitivity">{{ verb.0.get_transitivity_display }}</td>
-                  <td class="vocab vocab-type">{{ verb.0.get_jp_type_display }}</td>
-                  <td class="vocab vocab-buttons">
-                    <a class="btn btn-primary" data-toggle="modal" data-target="#verb-form-{{ verb.0.id }}">Edit</a>
-                    <a class="btn btn-danger" href="{% url 'delete_verb' verb.0.id %}">Delete</a>
-                  </td>
-                </tr>
-                <div class="modal fade" id="verb-form-{{ verb.0.id }}" tabindex="-1" role="dialog"
-                     aria-labelledby="verb-form-label-{{ verb.0.id }}">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="verb-form-label-{{ verb.0.id }}">Edit {{ verb.1 | safe }}</h4>
-                      </div>
-                      <div class="modal-body">
-                        <form class="form-inline" action="{% url 'edit_verb' verb.0.id %}" method="post">
-                          {% csrf_token %}
-                          <div class="form-group">
-                            <label for="id_vocab">Vocab:</label>
-                            <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required=""
-                                   value="{{ verb.0.vocab }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_phonetic">Phonetic:</label>
-                            <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required=""
-                                   value="{{ verb.0.phonetic }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_english">English:</label>
-                            <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required=""
-                                   value="{{ verb.0.english }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_category">Category:</label>
-                            <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required=""
-                                   value="{{ verb.0.category }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_transitivity">Transitivity:</label>
-                            <select class="form-control" id="id_transitivity" name="transitivity" required="">
-                              <option value="t">t</option>
-                              <option value="i">i</option>
-                            </select>
-                          </div>
-                          <div class="form-group">
-                            <label for="id_jp_type">Jp type:</label>
-                            <select class="form-control" id="id_jp_type" name="jp_type" required="">
-                              <option value="u">u</option>
-                              <option value="r">ru</option>
-                              <option value="e">ex</option>
-                            </select>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
               </tbody>
             </table>
+            <div id="div-verbs-modals"></div>
           </div>
         </div>
 
@@ -724,8 +656,7 @@
         });
       }
 
-      getTotals();
-      loadNouns();
+      initPage();
     });
   </script>
 
