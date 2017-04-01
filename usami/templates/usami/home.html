@@ -184,8 +184,8 @@
               <label for="select-verb-add-jp-type">Type:</label>
               <select id="select-verb-add-jp-type" class="form-control">
                 <option value="u">u</option>
-                <option value="ru">ru</option>
-                <option value="ex">ex</option>
+                <option value="r">ru</option>
+                <option value="e">ex</option>
               </select>
             </div>
             <div class="col-md-1">
@@ -246,35 +246,33 @@
 
         <div class="row">
           <div class="col-md-12">
-            <form class="form-inline" action="{% url 'add_adjective_jp' %}" method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <label for="id_vocab">Vocab:</label>
-                <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_phonetic">Phonetic:</label>
-                <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_english">English:</label>
-                <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_category">Category:</label>
-                <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required="">
-              </div>
-              <div class="form-group">
-                <label for="id_jp_type">Jp type:</label>
-                <select class="form-control" id="id_jp_type" name="jp_type" required="">
-                  <option value="i">i</option>
-                  <option value="na">na</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <input class="form-control" type="submit" value="Add">
-              </div>
-            </form>
+            <div class="col-md-2">
+              <label for="input-adjective-add-vocab">Vocab:</label>
+              <input id="input-adjective-add-vocab" class="form-control" maxlength="16" type="text" placeholder="楽しい">
+            </div>
+            <div class="col-md-2">
+              <label for="input-adjective-add-phonetic">Phonetic:</label>
+              <input id="input-adjective-add-phonetic" class="form-control" maxlength="32" type="text" placeholder="たの・・">
+            </div>
+            <div class="col-md-3">
+              <label for="input-adjective-add-english">English:</label>
+              <input id="input-adjective-add-english" class="form-control" maxlength="32" type="text" placeholder="fun">
+            </div>
+            <div class="col-md-2">
+              <label for="input-adjective-add-category">Category:</label>
+              <input id="input-adjective-add-category" class="form-control" maxlength="32" type="text" placeholder="emotion">
+            </div>
+            <div class="col-md-2">
+              <label for="select-adjective-add-jp-type">Type:</label>
+              <select id="select-adjective-add-jp-type" class="form-control">
+                <option value="i">i</option>
+                <option value="na">na</option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <label for="btn-adjective-add"></label>
+              <button id="btn-adjective-add" class="btn btn-success" onclick="addAdjective()">Add</button>
+            </div>
           </div>
         </div>
 
@@ -304,78 +302,21 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
+            <table id="table-adjectives" class="table table-vocab" data-toggle="table" data-sort-name="category" data-sort-order="asc">
               <thead>
               <tr>
-                <th data-field="vocab" data-sortable="true">Vocab</th>
+                <th data-field="vocab" data-sortable="true" data-cell-style="vocabCellStyle">Vocab</th>
                 <th data-field="english" data-sortable="true">English</th>
                 <th data-field="category" data-sortable="true">Category</th>
                 <th data-field="jp_type" data-sortable="true">Type</th>
+                <th data-field="buttons" data-sortable="false">Actions</th>
                 <th></th>
               </tr>
               </thead>
               <tbody>
-              {% for adjective in adjectives %}
-                <tr class="vocab-row vocab-row-{{ adjective.0.type }}">
-                  <td class="vocab vocab-vocab">{{ adjective.1 | safe }}</td>
-                  <td class="vocab vocab-english">{{ adjective.0.english }}</td>
-                  <td class="vocab vocab-category">{{ adjective.0.category }}</td>
-                  <td class="vocab vocab-type">{{ adjective.0.get_jp_type_display }}</td>
-                  <td class="vocab vocab-buttons">
-                    <a class="btn btn-primary" data-toggle="modal" data-target="#adjective-form-{{ adjective.0.id }}">Edit</a>
-                    <a class="btn btn-danger" href="{% url 'delete_adjective' adjective.0.id %}">Delete</a>
-                  </td>
-                </tr>
-                <div class="modal fade" id="adjective-form-{{ adjective.0.id }}" tabindex="-1" role="dialog"
-                     aria-labelledby="adjective-form-label-{{ adjective.0.id }}">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="adjective-form-label-{{ adjective.0.id }}">Edit {{ adjective.1 | safe }}</h4>
-                      </div>
-                      <div class="modal-body">
-                        <form class="form-inline" action="{% url 'edit_adjective' adjective.0.id %}" method="post">
-                          {% csrf_token %}
-                          <div class="form-group">
-                            <label for="id_vocab">Vocab:</label>
-                            <input class="form-control" id="id_vocab" maxlength="16" name="vocab" type="text" required=""
-                                   value="{{ adjective.0.vocab }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_phonetic">Phonetic:</label>
-                            <input class="form-control" id="id_phonetic" maxlength="32" name="phonetic" type="text" required=""
-                                   value="{{ adjective.0.phonetic }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_english">English:</label>
-                            <input class="form-control" id="id_english" maxlength="32" name="english" type="text" required=""
-                                   value="{{ adjective.0.english }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_category">Category:</label>
-                            <input class="form-control" id="id_category" maxlength="32" name="category" type="text" required=""
-                                   value="{{ adjective.0.category }}">
-                          </div>
-                          <div class="form-group">
-                            <label for="id_jp_type">Jp type:</label>
-                            <select class="form-control" id="id_jp_type" name="jp_type" required="">
-                              <option value="i">i</option>
-                              <option value="na">na</option>
-                            </select>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
               </tbody>
             </table>
+            <div id="div-adjectives-modals"></div>
           </div>
         </div>
 

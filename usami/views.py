@@ -155,6 +155,71 @@ def get_verb_modals_jp(request):
         """.format(_get_ruby(verb, "・"), verb.english, verb.category, verb.id, verb.vocab, verb.phonetic, verb.transitivity, verb.jp_type)
     return HttpResponse(html)
 
+def get_adjective_rows_jp(request):
+    rows = []
+    adjectives = _get_all_adjectives()
+    for adjective in adjectives:
+        row = {
+            'vocab': _get_ruby(adjective, "・"),
+            'english': adjective.english,
+            'category': adjective.category,
+            'jp_type': adjective.jp_type,
+            'buttons': """
+            <a class="btn btn-primary" data-toggle="modal" data-target="#adjective-form-{0}">Edit</a>
+            <a class="btn btn-danger" onclick="deleteAdjective({0})">Delete</a>
+            <a class="btn btn-success" onclick="archiveAdjective({0})">Archive</a>
+            """.format(adjective.id)
+        }
+        rows.append(row)
+    return HttpResponse(json.dumps(rows))
+
+def get_adjective_modals_jp(request):
+    html = ""
+    adjectives = _get_all_adjectives()
+    for adjective in adjectives:
+        html += """
+        <div class="modal fade" id="adjective-form-{3}" tabindex="-1" role="dialog" aria-labelledby="adjective-form-label-{3}">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="adjective-form-label-{3}">Edit {0}</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="adjective-edit-vocab-{3}">Vocab:</label>
+                  <input class="form-control" id="adjective-edit-vocab-{3}" maxlength="16" type="text" value="{4}">
+                </div>
+                <div class="form-group">
+                  <label for="adjective-edit-phonetic-{3}">Phonetic:</label>
+                  <input class="form-control" id="adjective-edit-phonetic-{3}" maxlength="32" type="text" value="{5}">
+                </div>
+                <div class="form-group">
+                  <label for="adjective-edit-english-{3}">English:</label>
+                  <input class="form-control" id="adjective-edit-english-{3}" maxlength="32" type="text" value="{1}">
+                </div>
+                <div class="form-group">
+                  <label for="adjective-edit-category-{3}">Category:</label>
+                  <input class="form-control" id="adjective-edit-category-{3}" maxlength="32" type="text" value="{2}">
+                </div>
+                <div class="form-group">
+                  <label for="adjective-edit-jp-type-{3}">Type:</label>
+                  <select class="form-control" id="adjective-edit-jp-type-{3}" value="{6}">
+                    <option value="i">i</option>
+                    <option value="na">na</option>
+                  </select>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        """.format(_get_ruby(adjective, "・"), adjective.english, adjective.category, adjective.id, adjective.vocab, adjective.phonetic, adjective.jp_type)
+    return HttpResponse(html)
+
 def get_totals(request):
     totals = {
         'total_nouns': len(_get_all_nouns()),
@@ -412,8 +477,8 @@ def delete_adjective(request, adjective_id):
     adjective = Adjective.objects.filter(id=adjective_id)
     adjective_deleted = adjective.first()
     adjective.delete()
-    messages.add_message(request, messages.WARNING, "Deleted: {}".format(adjective_deleted))
-    return _render_home(request, 'adjectives')
+    data = {'message': {'text': "Deleted: {}".format(adjective_deleted), 'level': 'warning'}}
+    return HttpResponse(json.dumps(data))
 
 @csrf_exempt
 def delete_adverb(request, adverb_id):
@@ -450,8 +515,13 @@ def archive_noun(request, noun_id):
 def unarchive_noun(request, noun_id):
     noun_unarchived = Noun.objects.filter(id=noun_id).first()
     noun_unarchived.archived = False
-    messages.add_message(request, messages.INFO, "Unarchived: {}".format(noun_unarchived))
-    return _render_home(request, 'nouns')
+    data = {
+        'message': {
+            'text': "Unarchived: {}".format(noun_unarchived),
+            'level': 'info',
+        }
+    }
+    return HttpResponse(json.dumps(data))
 
 @csrf_exempt
 def archive_verb(request, verb_id):
@@ -465,8 +535,33 @@ def archive_verb(request, verb_id):
 def unarchive_verb(request, verb_id):
     verb_unarchived = Verb.objects.filter(id=verb_id).first()
     verb_unarchived.archived = False
-    messages.add_message(request, messages.INFO, "Unarchived: {}".format(verb_unarchived))
-    return _render_home(request, 'nouns')
+    data = {
+        'message': {
+            'text': "Unarchived: {}".format(verb_unarchived),
+            'level': 'info',
+        }
+    }
+    return HttpResponse(json.dumps(data))
+
+@csrf_exempt
+def archive_adjective(request, adjective_id):
+    adjective_archived = Adjective.objects.filter(id=adjective_id).first()
+    adjective_archived.archived = True
+    adjective_archived.save()
+    data = {'message': {'text': "Archived: {}".format(adjective_archived), 'level': 'info'}}
+    return HttpResponse(json.dumps(data))
+
+@csrf_exempt
+def unarchive_adjective(request, adjective_id):
+    adjective_unarchived = Adjective.objects.filter(id=adjective_id).first()
+    adjective_unarchived.archived = False
+    data = {
+        'message': {
+            'text': "Unarchived: {}".format(adjective_unarchived),
+            'level': 'info',
+        }
+    }
+    return HttpResponse(json.dumps(data))
 
 ######## STATISTICS ###########################################################
 

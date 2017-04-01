@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^jp/nouns/modals/', usami.views.get_noun_modals_jp),
     url(r'^jp/verbs/rows/', usami.views.get_verb_rows_jp),
     url(r'^jp/verbs/modals/', usami.views.get_verb_modals_jp),
+    url(r'^jp/adjectives/rows/', usami.views.get_adjective_rows_jp),
+    url(r'^jp/adjectives/modals/', usami.views.get_adjective_modals_jp),
     url(r'^totals/', usami.views.get_totals),
 
     # Add vocab
@@ -43,13 +45,13 @@ urlpatterns = [
 
     url(r'^noun/archive/(?P<noun_id>[0-9]+)/', usami.views.archive_noun, name='archive_noun'),
     url(r'^verb/archive/(?P<verb_id>[0-9]+)/', usami.views.archive_verb, name='archive_verb'),
-    # url(r'^adjective/archive/(?P<adjective_id>[0-9]+)/', usami.views.archive_adjective, name='archive_adjective'),
+    url(r'^adjective/archive/(?P<adjective_id>[0-9]+)/', usami.views.archive_adjective, name='archive_adjective'),
     # url(r'^adverb/archive/(?P<adverb_id>[0-9]+)/', usami.views.archive_adverb, name='archive_adverb'),
     # url(r'^misc/archive/(?P<misc_id>[0-9]+)/', usami.views.archive_misc, name='archive_misc'),
 
     url(r'^noun/unarchive/(?P<noun_id>[0-9]+)/', usami.views.unarchive_noun, name='unarchive_noun'),
-    # url(r'^verb/unarchive/(?P<verb_id>[0-9]+)/', usami.views.unarchive_verb, name='unarchive_verb'),
-    # url(r'^adjective/unarchive/(?P<adjective_id>[0-9]+)/', usami.views.unarchive_adjective, name='unarchive_adjective'),
+    url(r'^verb/unarchive/(?P<verb_id>[0-9]+)/', usami.views.unarchive_verb, name='unarchive_verb'),
+    url(r'^adjective/unarchive/(?P<adjective_id>[0-9]+)/', usami.views.unarchive_adjective, name='unarchive_adjective'),
     # url(r'^adverb/unarchive/(?P<adverb_id>[0-9]+)/', usami.views.unarchive_adverb, name='unarchive_adverb'),
     # url(r'^misc/unarchive/(?P<misc_id>[0-9]+)/', usami.views.unarchive_misc, name='unarchive_misc'),
 ]
