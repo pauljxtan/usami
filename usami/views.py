@@ -16,7 +16,13 @@ from usami.models import Noun, Verb, Adjective, Adverb, Misc
 #   This should be the only view that actually renders HTML content.
 #   All other "views" either provide data for display or perform database operations.
 def home(request):
-    return _render_home(request)
+    return render(request, 'usami/home.html', {
+        'noun_stats': _get_noun_stats(),
+        'verb_stats': _get_verb_stats(),
+        'adjective_stats': _get_adjective_stats(),
+        'adverb_stats': _get_adverb_stats(),
+        'misc_stats': _get_misc_stats(),
+    })
 
 ######## RETRIEVE DATA ########################################################
 
@@ -155,6 +161,8 @@ def get_verb_modals_jp(request):
         """.format(_get_ruby(verb, "・"), verb.english, verb.category, verb.id, verb.vocab, verb.phonetic, verb.transitivity, verb.jp_type)
     return HttpResponse(html)
 
+# ADJECTIVES
+
 def get_adjective_rows_jp(request):
     rows = []
     adjectives = _get_all_adjectives()
@@ -219,6 +227,126 @@ def get_adjective_modals_jp(request):
         </div>
         """.format(_get_ruby(adjective, "・"), adjective.english, adjective.category, adjective.id, adjective.vocab, adjective.phonetic, adjective.jp_type)
     return HttpResponse(html)
+
+# ADVERBS
+
+def get_adverb_rows_jp(request):
+    rows = []
+    adverbs = _get_all_adverbs()
+    for adverb in adverbs:
+        row = {
+            'vocab': _get_ruby(adverb, "・"),
+            'english': adverb.english,
+            'category': adverb.category,
+            'buttons': """
+            <a class="btn btn-primary" data-toggle="modal" data-target="#adverb-form-{0}">Edit</a>
+            <a class="btn btn-danger" onclick="deleteAdverb({0})">Delete</a>
+            <a class="btn btn-success" onclick="archiveAdverb({0})">Archive</a>
+            """.format(adverb.id)
+        }
+        rows.append(row)
+    return HttpResponse(json.dumps(rows))
+
+def get_adverb_modals_jp(request):
+    html = ""
+    adverbs = _get_all_adverbs()
+    for adverb in adverbs:
+        html += """
+        <div class="modal fade" id="adverb-form-{3}" tabindex="-1" role="dialog" aria-labelledby="adverb-form-label-{3}">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="adverb-form-label-{3}">Edit {0}</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="adverb-edit-vocab-{3}">Vocab:</label>
+                  <input class="form-control" id="adverb-edit-vocab-{3}" maxlength="16" name="vocab" type="text" required="" value="{4}">
+                </div>
+                <div class="form-group">
+                  <label for="adverb-edit-phonetic-{3}">Phonetic:</label>
+                  <input class="form-control" id="adverb-edit-phonetic-{3}" maxlength="32" name="phonetic" type="text" required="" value="{5}">
+                </div>
+                <div class="form-group">
+                  <label for="adverb-edit-english-{3}">English:</label>
+                  <input class="form-control" id="adverb-edit-english-{3}" maxlength="32" name="english" type="text" required="" value="{1}">
+                </div>
+                <div class="form-group">
+                  <label for="adverb-edit-category-{3}">Category:</label>
+                  <input class="form-control" id="adverb-edit-category-{3}" maxlength="32" name="category" type="text" required="" value="{2}">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                 <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        """.format(_get_ruby(adverb, "・"), adverb.english, adverb.category, adverb.id, adverb.vocab, adverb.phonetic)
+    return HttpResponse(html)
+
+# MISCS
+
+def get_misc_rows_jp(request):
+    rows = []
+    miscs = _get_all_miscs()
+    for misc in miscs:
+        row = {
+            'vocab': _get_ruby(misc, "・"),
+            'english': misc.english,
+            'category': misc.category,
+            'buttons': """
+            <a class="btn btn-primary" data-toggle="modal" data-target="#misc-form-{0}">Edit</a>
+            <a class="btn btn-danger" onclick="deleteMisc({0})">Delete</a>
+            <a class="btn btn-success" onclick="archiveMisc({0})">Archive</a>
+            """.format(misc.id)
+        }
+        rows.append(row)
+    return HttpResponse(json.dumps(rows))
+
+def get_misc_modals_jp(request):
+    html = ""
+    miscs = _get_all_miscs()
+    for misc in miscs:
+        html += """
+        <div class="modal fade" id="misc-form-{3}" tabindex="-1" role="dialog" aria-labelledby="misc-form-label-{3}">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="misc-form-label-{3}">Edit {0}</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="misc-edit-vocab-{3}">Vocab:</label>
+                  <input class="form-control" id="misc-edit-vocab-{3}" maxlength="16" name="vocab" type="text" required="" value="{4}">
+                </div>
+                <div class="form-group">
+                  <label for="misc-edit-phonetic-{3}">Phonetic:</label>
+                  <input class="form-control" id="misc-edit-phonetic-{3}" maxlength="32" name="phonetic" type="text" required="" value="{5}">
+                </div>
+                <div class="form-group">
+                  <label for="misc-edit-english-{3}">English:</label>
+                  <input class="form-control" id="misc-edit-english-{3}" maxlength="32" name="english" type="text" required="" value="{1}">
+                </div>
+                <div class="form-group">
+                  <label for="misc-edit-category-{3}">Category:</label>
+                  <input class="form-control" id="misc-edit-category-{3}" maxlength="32" name="category" type="text" required="" value="{2}">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                 <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        """.format(_get_ruby(misc, "・"), misc.english, misc.category, misc.id, misc.vocab, misc.phonetic)
+    return HttpResponse(html)
+
+# STATS
 
 def get_totals(request):
     totals = {
@@ -485,16 +613,16 @@ def delete_adverb(request, adverb_id):
     adverb = Adverb.objects.filter(id=adverb_id)
     adverb_deleted = adverb.first()
     adverb.delete()
-    messages.add_message(request, messages.WARNING, "Deleted: {}".format(adverb_deleted))
-    return _render_home(request, 'adverbs')
+    data = {'message': {'text': "Deleted: {}".format(adverb_deleted), 'level': 'warning'}}
+    return HttpResponse(json.dumps(data))
 
 @csrf_exempt
 def delete_misc(request, misc_id):
     misc = Misc.objects.filter(id=misc_id)
     misc_deleted = misc.first()
     misc.delete()
-    messages.add_message(request, messages.WARNING, "Deleted: {}".format(misc_deleted))
-    return _render_home(request, 'miscs')
+    data = {'message': {'text': "Deleted: {}".format(misc_deleted), 'level': 'warning'}}
+    return HttpResponse(json.dumps(data))
 
 ######## ARCHIVE VOCAB ########################################################
 
@@ -563,6 +691,46 @@ def unarchive_adjective(request, adjective_id):
     }
     return HttpResponse(json.dumps(data))
 
+@csrf_exempt
+def archive_adverb(request, adverb_id):
+    adverb_archived = Adverb.objects.filter(id=adverb_id).first()
+    adverb_archived.archived = True
+    adverb_archived.save()
+    data = {'message': {'text': "Archived: {}".format(adverb_archived), 'level': 'info'}}
+    return HttpResponse(json.dumps(data))
+
+@csrf_exempt
+def unarchive_adverb(request, adverb_id):
+    adverb_unarchived = Adverb.objects.filter(id=adverb_id).first()
+    adverb_unarchived.archived = False
+    data = {
+        'message': {
+            'text': "Unarchived: {}".format(adverb_unarchived),
+            'level': 'info',
+        }
+    }
+    return HttpResponse(json.dumps(data))
+
+@csrf_exempt
+def archive_misc(request, misc_id):
+    misc_archived = Misc.objects.filter(id=misc_id).first()
+    misc_archived.archived = True
+    misc_archived.save()
+    data = {'message': {'text': "Archived: {}".format(misc_archived), 'level': 'info'}}
+    return HttpResponse(json.dumps(data))
+
+@csrf_exempt
+def unarchive_misc(request, misc_id):
+    misc_unarchived = Misc.objects.filter(id=misc_id).first()
+    misc_unarchived.archived = False
+    data = {
+        'message': {
+            'text': "Unarchived: {}".format(misc_unarchived),
+            'level': 'info',
+        }
+    }
+    return HttpResponse(json.dumps(data))
+
 ######## STATISTICS ###########################################################
 
 def _get_noun_stats():
@@ -611,70 +779,3 @@ def _get_ruby(vocab, phonetic_split_str):
         for i, v in enumerate(vocab.vocab):
             ruby += "<ruby>{}<rp>(</rp><rt>{}</rt><rp>)</rp></ruby>".format(v, phonetic_split [i])
     return ruby
-
-# TODO: Deprecate
-def _render_home(request, active_pos=None, active_lang='jp'):
-    return render(
-        request,
-        'usami/home.html',
-        {
-            'nouns': _get_all_nouns_with_ruby("・"),
-            'verbs': _get_all_verbs_with_ruby("・"),
-            'adjectives': _get_all_adjectives_with_ruby("・"),
-            'adverbs': _get_all_adverbs_with_ruby("・"),
-            'miscs': _get_all_miscs_with_ruby("・"),
-
-            'nouns_archived': _get_all_nouns_with_ruby("・", archived=True),
-            'verbs_archived': _get_all_verbs_with_ruby("・", archived=True),
-            'adjectives_archived': _get_all_adjectives_with_ruby("・", archived=True),
-            'adverbs_archived': _get_all_adverbs_with_ruby("・", archived=True),
-            'miscs_archived': _get_all_miscs_with_ruby("・", archived=True),
-
-            'active_pos': active_pos,
-            'active_lang': active_lang,
-
-            'total_nouns': len(_get_all_nouns()),
-            'total_verbs': len(_get_all_verbs()),
-            'total_adjectives': len(_get_all_adjectives()),
-            'total_adverbs': len(_get_all_adverbs()),
-            'total_miscs': len(_get_all_miscs()),
-
-            'noun_stats': _get_noun_stats(),
-            'verb_stats': _get_verb_stats(),
-            'adjective_stats': _get_adjective_stats(),
-            'adverb_stats': _get_adverb_stats(),
-            'misc_stats': _get_misc_stats(),
-        }
-    )
-
-# TODO: Deprecate
-def _get_all_nouns_with_ruby(phonetic_split_str, archived=False):
-    nouns = _get_all_nouns(archived)
-    return _get_vocabs_with_ruby(nouns, phonetic_split_str)
-
-# TODO: Deprecate
-def _get_all_verbs_with_ruby(phonetic_split_str, archived=False):
-    verbs = _get_all_verbs(archived)
-    return _get_vocabs_with_ruby(verbs, phonetic_split_str)
-
-# TODO: Deprecate
-def _get_all_adjectives_with_ruby(phonetic_split_str, archived=False):
-    adjectives = _get_all_adjectives(archived)
-    return _get_vocabs_with_ruby(adjectives, phonetic_split_str)
-
-# TODO: Deprecate
-def _get_all_adverbs_with_ruby(phonetic_split_str, archived=False):
-    adverbs = _get_all_adverbs(archived)
-    return _get_vocabs_with_ruby(adverbs, phonetic_split_str)
-
-# TODO: Deprecate
-def _get_all_miscs_with_ruby(phonetic_split_str, archived=False):
-    miscs = _get_all_miscs(archived)
-    return _get_vocabs_with_ruby(miscs, phonetic_split_str)
-
-# TODO: Deprecate
-def _get_vocabs_with_ruby(vocabs, phonetic_split_str, archived=False):
-    vocabs_with_ruby = []
-    for vocab in vocabs:
-        vocabs_with_ruby.append((vocab, _get_ruby(vocab, phonetic_split_str)))
-    return vocabs_with_ruby

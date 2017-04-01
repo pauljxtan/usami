@@ -3,6 +3,8 @@ function initPage() {
   loadNouns();
   loadVerbs();
   loadAdjectives();
+  loadAdverbs();
+  loadMiscs();
 }
 
 // Get
@@ -61,9 +63,30 @@ function loadAdjectives() {
 }
 
 function loadedAdjectives(data) {
-  console.log("Loaded adjectives");
   doSomethingWithFade('#table-adjectives', function() {
     $('#table-adjectives').bootstrapTable('load', JSON.parse(data));
+  }, doNothing);
+}
+
+function loadAdverbs() {
+  $.get('/jp/adverbs/rows/', {}, loadedAdverbs);
+  $('#div-adverbs-modals').load('/jp/adverbs/modals/');
+}
+
+function loadedAdverbs(data) {
+  doSomethingWithFade('#table-adverbs', function() {
+    $('#table-adverbs').bootstrapTable('load', JSON.parse(data));
+  }, doNothing);
+}
+
+function loadMiscs() {
+  $.get('/jp/miscs/rows/', {}, loadedMiscs);
+  $('#div-miscs-modals').load('/jp/miscs/modals/');
+}
+
+function loadedMiscs(data) {
+  doSomethingWithFade('#table-miscs', function() {
+    $('#table-miscs').bootstrapTable('load', JSON.parse(data));
   }, doNothing);
 }
 
@@ -122,6 +145,34 @@ function addedAdjective(data) {
   loadMessageAndRefreshAdjectives(data);
 }
 
+function addAdverb() {
+  $.post('/jp/adverb/add/', {
+        vocab: $('#input-adverb-add-vocab').val(),
+        phonetic: $('#input-adverb-add-phonetic').val(),
+        english: $('#input-adverb-add-english').val(),
+        category: $('#input-adverb-add-category').val()
+      },
+      addedAdverb);
+}
+
+function addedAdverb(data) {
+  loadMessageAndRefreshAdverbs(data);
+}
+
+function addMisc() {
+  $.post('/jp/misc/add/', {
+        vocab: $('#input-misc-add-vocab').val(),
+        phonetic: $('#input-misc-add-phonetic').val(),
+        english: $('#input-misc-add-english').val(),
+        category: $('#input-misc-add-category').val()
+      },
+      addedMisc);
+}
+
+function addedMisc(data) {
+  loadMessageAndRefreshMiscs(data);
+}
+
 // Delete
 
 function deleteNoun(id) {
@@ -147,6 +198,22 @@ function deleteAdjective(id) {
 
 function deletedAdjective(data) {
   loadMessageAndRefreshAdjectives(data);
+}
+
+function deleteAdverb(id) {
+  $.post('/adverb/delete/'+id+'/', {}, deletedAdverb);
+}
+
+function deletedAdverb(data) {
+  loadMessageAndRefreshAdverbs(data);
+}
+
+function deleteMisc(id) {
+  $.post('/misc/delete/'+id+'/', {}, deletedMisc);
+}
+
+function deletedMisc(data) {
+  loadMessageAndRefreshMiscs(data);
 }
 
 // Archive
@@ -176,6 +243,22 @@ function archivedAdjective(data) {
   loadMessageAndRefreshAdjectives(data);
 }
 
+function archiveAdverb(id) {
+  $.post('/adverb/archive/'+id+'/', {}, archivedAdverb);
+}
+
+function archivedAdverb(data) {
+  loadMessageAndRefreshAdverbs(data);
+}
+
+function archiveMisc(id) {
+  $.post('/misc/archive/'+id+'/', {}, archivedMisc);
+}
+
+function archivedMisc(data) {
+  loadMessageAndRefreshMiscs(data);
+}
+
 // Refresh
 
 function loadMessageAndRefreshNouns(data) {
@@ -194,6 +277,18 @@ function loadMessageAndRefreshAdjectives(data) {
   loadMessage(data);
   getTotals();
   loadAdjectives();
+}
+
+function loadMessageAndRefreshAdverbs(data) {
+  loadMessage(data);
+  getTotals();
+  loadAdverbs();
+}
+
+function loadMessageAndRefreshMiscs(data) {
+  loadMessage(data);
+  getTotals();
+  loadMiscs();
 }
 
 // Extensions
