@@ -173,6 +173,26 @@ function addedMisc(data) {
   loadMessageAndRefreshMiscs(data);
 }
 
+// Edit
+
+function editNoun(id) {
+  console.log($('#input-noun-edit-vocab-'+id).val());
+  console.log($('#input-noun-edit-phonetic-'+id).val());
+  console.log($('#input-noun-edit-english-'+id).val());
+  console.log($('#input-noun-edit-category-'+id).val());
+  $.post('/noun/edit/'+id+'/', {
+        vocab: $('#input-noun-edit-vocab-'+id).val(),
+        phonetic: $('#input-noun-edit-phonetic-'+id).val(),
+        english: $('#input-noun-edit-english-'+id).val(),
+        category: $('#input-noun-edit-category-'+id).val()
+      },
+      editedNoun);
+}
+
+function editedNoun(data) {
+  loadMessageAndRefreshNouns(data);
+}
+
 // Delete
 
 function deleteNoun(id) {

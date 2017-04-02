@@ -11,6 +11,7 @@ from usami.models import Noun, Verb, Adjective, Adverb, Misc
 
 # TODO:
 # -- Handle invalid input(s)
+# -- Cleanup edit modals
 
 # Single-page application model:
 #   This should be the only view that actually renders HTML content.
@@ -59,24 +60,24 @@ def get_noun_modals_jp(request):
               </div>
               <div class="modal-body">
                 <div class="form-group">
-                  <label for="noun-edit-vocab-{3}">Vocab:</label>
-                  <input class="form-control" id="noun-edit-vocab-{3}" maxlength="16" name="vocab" type="text" required="" value="{4}">
+                  <label for="input-noun-edit-vocab-{3}">Vocab:</label>
+                  <input class="form-control" id="input-noun-edit-vocab-{3}" maxlength="16" type="text" value="{4}">
                 </div>
                 <div class="form-group">
-                  <label for="noun-edit-phonetic-{3}">Phonetic:</label>
-                  <input class="form-control" id="noun-edit-phonetic-{3}" maxlength="32" name="phonetic" type="text" required="" value="{5}">
+                  <label for="input-noun-edit-phonetic-{3}">Phonetic:</label>
+                  <input class="form-control" id="input-noun-edit-phonetic-{3}" maxlength="32" type="text" value="{5}">
                 </div>
                 <div class="form-group">
-                  <label for="noun-edit-english-{3}">English:</label>
-                  <input class="form-control" id="noun-edit-english-{3}" maxlength="32" name="english" type="text" required="" value="{1}">
+                  <label for="input-noun-edit-english-{3}">English:</label>
+                  <input class="form-control" id="input-noun-edit-english-{3}" maxlength="32" type="text" value="{1}">
                 </div>
                 <div class="form-group">
-                  <label for="noun-edit-category-{3}">Category:</label>
-                  <input class="form-control" id="noun-edit-category-{3}" maxlength="32" name="category" type="text" required="" value="{2}">
+                  <label for="input-noun-edit-category-{3}">Category:</label>
+                  <input class="form-control" id="input-noun-edit-category-{3}" maxlength="32" type="text" value="{2}">
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                 <button type="submit" class="btn btn-primary">Save changes</button>
+                 <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="editNoun({3})">Save changes</button>
                 </div>
               </div>
             </div>
@@ -491,7 +492,6 @@ def _add_misc(request, lang):
 
 @csrf_exempt
 def edit_noun(request, noun_id):
-    active_lang = None
     if request.method == 'POST':
         form = NounForm(request.POST)
         if form.is_valid():
@@ -501,11 +501,12 @@ def edit_noun(request, noun_id):
             noun_edited.english  = form.cleaned_data.get('english', "")
             noun_edited.category = form.cleaned_data.get('category', "")
             noun_edited.save()
-            active_lang = noun_edited.lang
-            messages.add_message(request, messages.INFO, "Edited: {}".format(noun_edited))
-    if active_lang:
-        return _render_home(request, 'nouns', active_lang)
-    return _render_home(request, 'nouns')
+            data = {'message': {'text': "Edited: {}".format(noun_edited), 'level': 'success'}}
+        else:
+            data = {'message': {'text': "Could not edit noun [{}]".format(noun_id), 'level': 'error'}}
+    else:
+        data = {'message': {'text': "Request was not POST", 'level': 'error'}}
+    return HttpResponse(json.dumps(data))
 
 @csrf_exempt
 def edit_verb(request, verb_id):

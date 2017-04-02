@@ -26,18 +26,18 @@
     </div>
   </div>
 
-  <!-- TODO: deprecate this ASAP -->
-  {% if messages %}
-    {% for message in messages %}
-      <div class="row">
-        <div class="col-md-12">
-          <div class="alert alert-{{ message.tags }}">
-            <span class="lead">{{ message }}</span>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  {% endif %}
+{#  <!-- TODO: deprecate this ASAP -->#}
+{#  {% if messages %}#}
+{#    {% for message in messages %}#}
+{#      <div class="row">#}
+{#        <div class="col-md-12">#}
+{#          <div class="alert alert-{{ message.tags }}">#}
+{#            <span class="lead">{{ message }}</span>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{#    {% endfor %}#}
+{#  {% endif %}#}
 
   <div class="row">
     <div class="col-md-12">
@@ -48,7 +48,6 @@
   </div>
 
 
-  <!-- TODO: Show active button(s) -->
   <div class="row">
     <div class="col-md-12">
       <button id="btn-collapse-jp" class="btn btn-primary btn-collapse{% if active_lang == 'jp' %} active{% endif %}" data-toggle="collapse" data-target="#collapse-jp">日本語</button>
