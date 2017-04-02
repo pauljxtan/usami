@@ -19,7 +19,15 @@ urlpatterns = [
     url(r'^jp/adverbs/modals/', usami.views.get_adverb_modals_jp),
     url(r'^jp/miscs/rows/', usami.views.get_misc_rows_jp),
     url(r'^jp/miscs/modals/', usami.views.get_misc_modals_jp),
+
+    # Stats
+
     url(r'^totals/', usami.views.get_totals),
+    url(r'^jp/nouns/catcounts/', usami.views.get_noun_catcounts_jp),
+    url(r'^jp/verbs/catcounts/', usami.views.get_verb_catcounts_jp),
+    url(r'^jp/adjectives/catcounts/', usami.views.get_adjective_catcounts_jp),
+    url(r'^jp/adverbs/catcounts/', usami.views.get_adverb_catcounts_jp),
+    url(r'^jp/miscs/catcounts/', usami.views.get_misc_catcounts_jp),
 
     # Add vocab
 

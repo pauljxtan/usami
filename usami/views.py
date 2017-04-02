@@ -17,13 +17,7 @@ from usami.models import Noun, Verb, Adjective, Adverb, Misc
 #   This should be the only view that actually renders HTML content.
 #   All other "views" either provide data for display or perform database operations.
 def home(request):
-    return render(request, 'usami/home.html', {
-        'noun_stats': _get_noun_stats(),
-        'verb_stats': _get_verb_stats(),
-        'adjective_stats': _get_adjective_stats(),
-        'adverb_stats': _get_adverb_stats(),
-        'misc_stats': _get_misc_stats(),
-    })
+    return render(request, 'usami/home.html')
 
 ######## RETRIEVE DATA ########################################################
 
@@ -364,6 +358,51 @@ def get_totals(request):
         'total_miscs_archived': len(_get_all_miscs(archived=True)),
     }
     return HttpResponse(json.dumps(totals))
+
+def get_noun_catcounts_jp(request):
+    stats = _get_noun_stats()
+    catcounts = stats['category_counts']
+    html = ""
+    for catcount in catcounts:
+        category, count = catcount
+        html += "<tr><td>{}</td><td>{}</td></tr>\n".format(category, count)
+    return HttpResponse(html)
+
+def get_verb_catcounts_jp(request):
+    stats = _get_verb_stats()
+    catcounts = stats['category_counts']
+    html = ""
+    for catcount in catcounts:
+        category, count = catcount
+        html += "<tr><td>{}</td><td>{}</td></tr>\n".format(category, count)
+    return HttpResponse(html)
+
+def get_adjective_catcounts_jp(request):
+    stats = _get_adjective_stats()
+    catcounts = stats['category_counts']
+    html = ""
+    for catcount in catcounts:
+        category, count = catcount
+        html += "<tr><td>{}</td><td>{}</td></tr>\n".format(category, count)
+    return HttpResponse(html)
+
+def get_adverb_catcounts_jp(request):
+    stats = _get_adverb_stats()
+    catcounts = stats['category_counts']
+    html = ""
+    for catcount in catcounts:
+        category, count = catcount
+        html += "<tr><td>{}</td><td>{}</td></tr>\n".format(category, count)
+    return HttpResponse(html)
+
+def get_misc_catcounts_jp(request):
+    stats = _get_misc_stats()
+    catcounts = stats['category_counts']
+    html = ""
+    for catcount in catcounts:
+        category, count = catcount
+        html += "<tr><td>{}</td><td>{}</td></tr>\n".format(category, count)
+    return HttpResponse(html)
 
 ######## GET VOCAB ############################################################
 

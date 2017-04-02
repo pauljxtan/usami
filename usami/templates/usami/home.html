@@ -15,7 +15,7 @@
       <h1><a href="https://github.com/pauljxtan/usami" target="_blank">GitHub</a></h1>
       <h1>TODO</h1>
       <ul>
-        <li>AJAX!</li>
+        <li>AJAX! (edit)</li>
         <li>Store table rows in JSON file (reduce DB overhead)</li>
         <li>Archive/unarchive "learned" vocab</li>
         <li>Filter on category (etc.)</li>
@@ -25,19 +25,6 @@
       </ul>
     </div>
   </div>
-
-{#  <!-- TODO: deprecate this ASAP -->#}
-{#  {% if messages %}#}
-{#    {% for message in messages %}#}
-{#      <div class="row">#}
-{#        <div class="col-md-12">#}
-{#          <div class="alert alert-{{ message.tags }}">#}
-{#            <span class="lead">{{ message }}</span>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-{#    {% endfor %}#}
-{#  {% endif %}#}
 
   <div class="row">
     <div class="col-md-12">
@@ -113,20 +100,8 @@
             <button class="btn btn-default" data-toggle="collapse" data-target="#stats-noun">Show stats</button>
             <div id="stats-noun" class="collapse">
               <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for category_and_count in noun_stats.category_counts %}
-                  <tr>
-                    <td>{{ category_and_count.0 }}</td>
-                    <td>{{ category_and_count.1 }}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
+                <thead><tr><th>Category</th><th>Count</th></tr></thead>
+                <tbody id="table-category-counts-nouns-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -143,8 +118,7 @@
                 <th data-field="buttons" data-sortable="false">Actions</th>
               </tr>
               </thead>
-              <tbody id="table-nouns-tbody">
-              </tbody>
+              <tbody id="table-nouns-tbody"></tbody>
             </table>
             <div id="div-nouns-modals"></div>
           </div>
@@ -199,20 +173,8 @@
             <button class="btn btn-default" data-toggle="collapse" data-target="#stats-verb">Show stats</button>
             <div id="stats-verb" class="collapse">
               <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for category_and_count in verb_stats.category_counts %}
-                  <tr>
-                    <td>{{ category_and_count.0 }}</td>
-                    <td>{{ category_and_count.1 }}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
+                <thead><tr><th>Category</th><th>Count</th></tr></thead>
+                <tbody id="table-category-counts-verbs-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -280,20 +242,8 @@
             <button class="btn btn-default" data-toggle="collapse" data-target="#stats-adjective">Show stats</button>
             <div id="stats-adjective" class="collapse">
               <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for category_and_count in adjective_stats.category_counts %}
-                  <tr>
-                    <td>{{ category_and_count.0 }}</td>
-                    <td>{{ category_and_count.1 }}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
+                <thead><tr><th>Category</th><th>Count</th></tr></thead>
+                <tbody id="table-category-counts-adjectives-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -353,20 +303,8 @@
             <button class="btn btn-default" data-toggle="collapse" data-target="#stats-adverb">Show stats</button>
             <div id="stats-adverb" class="collapse">
               <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for category_and_count in adverb_stats.category_counts %}
-                  <tr>
-                    <td>{{ category_and_count.0 }}</td>
-                    <td>{{ category_and_count.1 }}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
+                <thead><tr><th>Category</th><th>Count</th></tr></thead>
+                <tbody id="table-category-counts-adverbs-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -425,20 +363,8 @@
             <button class="btn btn-default" data-toggle="collapse" data-target="#stats-misc">Show stats</button>
             <div id="stats-misc" class="collapse">
               <table class="table table-hover">
-                <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Count</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for category_and_count in misc_stats.category_counts %}
-                  <tr>
-                    <td>{{ category_and_count.0 }}</td>
-                    <td>{{ category_and_count.1 }}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
+                <thead><tr><th>Category</th><th>Count</th></tr></thead>
+                <tbody id="table-category-counts-miscs-tbody"></tbody>
               </table>
             </div>
           </div>

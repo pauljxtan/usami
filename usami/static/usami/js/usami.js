@@ -38,6 +38,7 @@ function loadTotals(data) {
 function loadNouns() {
   $.get('/jp/nouns/rows/', {}, loadedNouns);
   $('#div-nouns-modals').load('/jp/nouns/modals/');
+  $('#table-category-counts-nouns-tbody').load('/jp/nouns/catcounts/');
 }
 
 function loadedNouns(data) {
@@ -49,6 +50,7 @@ function loadedNouns(data) {
 function loadVerbs() {
   $.get('/jp/verbs/rows/', {}, loadedVerbs);
   $('#div-verbs-modals').load('/jp/verbs/modals/');
+  $('#table-category-counts-verbs-tbody').load('/jp/verbs/catcounts/');
 }
 
 function loadedVerbs(data) {
@@ -60,6 +62,7 @@ function loadedVerbs(data) {
 function loadAdjectives() {
   $.get('/jp/adjectives/rows/', {}, loadedAdjectives);
   $('#div-adjectives-modals').load('/jp/adjectives/modals/');
+  $('#table-category-counts-adjectives-tbody').load('/jp/adjectives/catcounts/');
 }
 
 function loadedAdjectives(data) {
@@ -71,6 +74,7 @@ function loadedAdjectives(data) {
 function loadAdverbs() {
   $.get('/jp/adverbs/rows/', {}, loadedAdverbs);
   $('#div-adverbs-modals').load('/jp/adverbs/modals/');
+  $('#table-category-counts-adverbs-tbody').load('/jp/adverbs/catcounts/');
 }
 
 function loadedAdverbs(data) {
@@ -82,6 +86,7 @@ function loadedAdverbs(data) {
 function loadMiscs() {
   $.get('/jp/miscs/rows/', {}, loadedMiscs);
   $('#div-miscs-modals').load('/jp/miscs/modals/');
+  $('#table-category-counts-miscs-tbody').load('/jp/miscs/catcounts/');
 }
 
 function loadedMiscs(data) {
